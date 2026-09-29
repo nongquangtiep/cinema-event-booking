@@ -3,10 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vé Của Tôi & Tra Cứu - CineWave</title>
+  <title>Tra Cứu & Vé Của Tôi - CineWave</title>
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    .lookup-section {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 2rem;
+      margin: 2.5rem 0;
+      max-width: 600px;
+    }
+    .lookup-input-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .booking-history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+  </style>
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
@@ -20,19 +42,38 @@
     </div>
   </header>
 
-  <main class="container my-bookings-container">
-    <h2>Tra Cứu & Lịch Sử Đặt Vé</h2>
-    <div class="search-ticket-box">
-      <input type="text" id="lookup-code" placeholder="Nhập mã đặt vé (ví dụ: BK-...)">
-      <button class="btn btn-primary" id="btn-lookup">Tra Cứu Vé</button>
+  <main class="container">
+    <div class="lookup-section">
+      <h2 style="font-size:1.4rem;color:#fff;">Tra Cứu Vé Bằng Mã Đặt Chỗ</h2>
+      <p style="font-size:0.9rem;color:var(--text-secondary);margin-top:4px;">
+        Nhập mã vé dạng <code>BK-...</code> in trên vé hoặc gửi về email của bạn.
+      </p>
+
+      <form id="lookup-form" class="lookup-input-group">
+        <input type="text" id="lookup-code" placeholder="Ví dụ: BK-2026-DUNE01" required style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.75rem 1rem;border-radius:8px;">
+        <button type="submit" class="btn btn-primary">Tra Cứu</button>
+      </form>
     </div>
 
-    <div class="tickets-list" id="tickets-list">
-      <p class="placeholder-text">Nhập mã vé ở trên hoặc đăng nhập để xem danh sách vé đã đặt.</p>
-    </div>
+    <section>
+      <h3 style="margin-bottom:1.25rem;color:#fff;border-left:4px solid var(--accent-red);padding-left:10px;">
+        Lịch Sử Đặt Vé Gần Đây
+      </h3>
+      <div class="booking-history-grid" id="history-grid">
+        <p class="placeholder-text">Chưa có mã vé lưu trên trình duyệt này.</p>
+      </div>
+    </section>
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/my-bookings.js"></script>
 </body>
 </html>

@@ -3,54 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Đăng Nhập / Đăng Ký - CineWave</title>
+  <title>Đăng Nhập & Đăng Ký - CineWave</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="dark-theme auth-body">
   <div class="auth-card">
-    <a href="index.html" class="logo">Cine<span>Wave</span></a>
+    <a href="index.html" class="logo" style="justify-content:center;margin-bottom:0.5rem;">Cine<span>Wave</span></a>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.25rem;">Hệ thống đặt vé xem phim & sự kiện</p>
+
     <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-login">Đăng Nhập</button>
-      <button class="auth-tab" id="tab-register">Đăng Ký</button>
+      <button class="auth-tab active" id="tab-btn-login">Đăng Nhập</button>
+      <button class="auth-tab" id="tab-btn-register">Đăng Ký</button>
     </div>
 
     <!-- Login Form -->
-    <form id="login-form" class="auth-form">
+    <form id="form-login" class="auth-form">
       <div class="form-group">
-        <label for="login-username">Tài khoản hoặc Email</label>
-        <input type="text" id="login-username" required placeholder="admin hoặc user@gmail.com">
+        <label for="login-username">Tài Khoản hoặc Email *</label>
+        <input type="text" id="login-username" required placeholder="admin hoặc user@example.com">
       </div>
       <div class="form-group">
-        <label for="login-password">Mật khẩu</label>
-        <input type="password" id="login-password" required placeholder="••••••••">
+        <label for="login-password">Mật Khẩu *</label>
+        <input type="password" id="login-password" required placeholder="Nhập mật khẩu...">
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;" id="btn-login-submit">
+        Đăng Nhập
+      </button>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1rem;text-align:center;">
+        Tài khoản test Admin: <code>admin</code> / <code>admin123</code>
+      </p>
     </form>
 
     <!-- Register Form -->
-    <form id="register-form" class="auth-form" style="display:none;">
+    <form id="form-register" class="auth-form" style="display:none;">
       <div class="form-group">
-        <label for="reg-name">Họ và Tên</label>
+        <label for="reg-name">Họ và Tên *</label>
         <input type="text" id="reg-name" required placeholder="Nguyễn Văn A">
       </div>
       <div class="form-group">
-        <label for="reg-username">Tên đăng nhập</label>
+        <label for="reg-username">Tên Đăng Nhập (Username) *</label>
         <input type="text" id="reg-username" required placeholder="nguyenvana">
       </div>
       <div class="form-group">
-        <label for="reg-email">Email</label>
-        <input type="email" id="reg-email" required placeholder="example@gmail.com">
+        <label for="reg-email">Địa Chỉ Email *</label>
+        <input type="email" id="reg-email" required placeholder="vana@example.com">
       </div>
       <div class="form-group">
-        <label for="reg-password">Mật khẩu</label>
-        <input type="password" id="reg-password" required placeholder="••••••••">
+        <label for="reg-phone">Số Điện Thoại</label>
+        <input type="tel" id="reg-phone" placeholder="0912345678">
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Tạo Tài Khoản</button>
+      <div class="form-group">
+        <label for="reg-password">Mật Khẩu *</label>
+        <input type="password" id="reg-password" required placeholder="Tối thiểu 6 ký tự">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;" id="btn-reg-submit">
+        Tạo Tài Khoản Mới
+      </button>
     </form>
-    <div id="auth-alert" class="auth-alert"></div>
+
+    <div style="margin-top:1.5rem;">
+      <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);text-decoration:none;">← Quay lại trang chủ</a>
+    </div>
   </div>
 
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
 </body>
 </html>

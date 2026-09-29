@@ -3,50 +3,205 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - CineWave</title>
+  <title>Bảng Điều Khiển Quản Trị - CineWave</title>
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body class="dark-theme admin-layout">
+  <!-- Sidebar -->
   <aside class="admin-sidebar">
     <div class="sidebar-brand">
       <a href="../index.html" class="logo">Cine<span>Admin</span></a>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Management Portal</p>
     </div>
+
     <nav class="sidebar-menu">
-      <a href="#stats" class="active">Báo Cáo Thống Kê</a>
-      <a href="#movies">Quản Lý Phim</a>
-      <a href="#showtimes">Quản Lý Suất Chiếu</a>
-      <a href="#bookings">Quản Lý Đơn Vé</a>
-      <a href="#checkin">Soát Vé (Check-in QR)</a>
-      <a href="../index.html">Xem Trang Web</a>
+      <button class="menu-item active" data-target="sec-stats">📊 Báo Cáo Thống Kê</button>
+      <button class="menu-item" data-target="sec-movies">🎬 Quản Lý Phim</button>
+      <button class="menu-item" data-target="sec-bookings">🎟️ Danh Sách Vé Đặt</button>
+      <button class="menu-item" data-target="sec-checkin">🔍 Soát Vé (Check-in)</button>
+      <div style="margin-top:auto;border-top:1px solid var(--border-color);padding-top:1rem;">
+        <a href="../index.html" style="color:var(--text-muted);">← Xem Website Khách</a>
+        <button id="admin-logout-btn" style="color:var(--accent-red);margin-top:0.5rem;">🚪 Đăng Xuất</button>
+      </div>
     </nav>
   </aside>
 
+  <!-- Main Content -->
   <main class="admin-main">
     <header class="admin-header">
-      <h2>Bảng Điều Khiển Quản Trị</h2>
-      <div id="admin-user-info">Admin Account</div>
+      <h2 id="section-title">Báo Cáo Thống Kê</h2>
+      <div id="admin-profile" style="color:var(--text-secondary);font-size:0.9rem;">
+        Admin: <strong id="admin-name" style="color:#fff;">...</strong>
+      </div>
     </header>
 
-    <div class="admin-content" id="admin-content">
+    <!-- 1. Stats Section -->
+    <section id="sec-stats" class="admin-section active">
       <div class="stats-cards">
-        <div class="card stat-card">
-          <h4>Tổng Doanh Thu</h4>
-          <p class="stat-number" id="stat-revenue">0 đ</p>
+        <div class="stat-card">
+          <h4>Tổng Doanh Thu (Đã Thu)</h4>
+          <p class="stat-number" id="kpi-revenue">0 đ</p>
         </div>
-        <div class="card stat-card">
-          <h4>Vé Đã Bán</h4>
-          <p class="stat-number" id="stat-tickets">0</p>
+        <div class="stat-card">
+          <h4>Vé Đã Bán Ra</h4>
+          <p class="stat-number" id="kpi-tickets" style="color:var(--accent-emerald);">0</p>
         </div>
-        <div class="card stat-card">
+        <div class="stat-card">
           <h4>Phim Đang Chiếu</h4>
-          <p class="stat-number" id="stat-movies">0</p>
+          <p class="stat-number" id="kpi-movies" style="color:var(--accent-blue);">0</p>
+        </div>
+        <div class="stat-card">
+          <h4>Tài Khoản Khách Hàng</h4>
+          <p class="stat-number" id="kpi-users" style="color:var(--accent-purple);">0</p>
         </div>
       </div>
-    </div>
+
+      <div class="table-container">
+        <div class="table-header">
+          <h3 style="font-size:1.1rem;color:#fff;">Đơn Đặt Vé Gần Đây Nhất</h3>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Mã Đơn Vé</th>
+              <th>Khách Hàng</th>
+              <th>Phim</th>
+              <th>Tổng Tiền</th>
+              <th>Trạng Thái</th>
+              <th>Thời Gian</th>
+            </tr>
+          </thead>
+          <tbody id="recent-bookings-body">
+            <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang nạp dữ liệu...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. Movies Management Section -->
+    <section id="sec-movies" class="admin-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+        <h3>Danh Sách Phim & Sự Kiện</h3>
+        <button class="btn btn-primary" id="btn-toggle-movie-form">+ Thêm Phim Mới</button>
+      </div>
+
+      <!-- Add Movie Modal / Form -->
+      <div id="movie-form-box" class="card" style="display:none;margin-bottom:2rem;padding:1.5rem;background-color:var(--bg-card);">
+        <h4 style="margin-bottom:1rem;color:#fff;">Thêm Phim Mới Vào Hệ Thống</h4>
+        <form id="form-add-movie" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Tên Phim / Sự Kiện *</label>
+            <input type="text" id="m-title" required placeholder="Ví dụ: Avatar: Dòng Chảy Của Nước">
+          </div>
+          <div class="form-group">
+            <label>Danh Mục *</label>
+            <select id="m-category" required>
+              <option value="1">Hành Động & Khoa Học Viễn Tưởng</option>
+              <option value="2">Hoạt Hình & Phiêu Lưu Gia Đình</option>
+              <option value="3">Live Concert & Sự Kiện Âm Nhạc</option>
+              <option value="4">Kinh Dị & Tâm Lý Bí Ẩn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Thời Lượng (Phút) *</label>
+            <input type="number" id="m-duration" required placeholder="120" value="120">
+          </div>
+          <div class="form-group">
+            <label>Ngày Khởi Chiếu *</label>
+            <input type="date" id="m-release" required>
+          </div>
+          <div class="form-group">
+            <label>Trạng Thái *</label>
+            <select id="m-status" required>
+              <option value="now_showing">Đang Chiếu (now_showing)</option>
+              <option value="coming_soon">Sắp Chiếu (coming_soon)</option>
+            </select>
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>URL Ảnh Poster (Link hình ảnh)</label>
+            <input type="url" id="m-poster" placeholder="https://example.com/poster.jpg">
+          </div>
+          <div class="form-group" style="grid-column: span 2;">
+            <label>Tóm Tắt Nội Dung Phim</label>
+            <textarea id="m-desc" rows="3" style="width:100%;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.75rem;border-radius:8px;"></textarea>
+          </div>
+          <div style="grid-column: span 2;display:flex;gap:1rem;">
+            <button type="submit" class="btn btn-primary">Lưu Phim Mới</button>
+            <button type="button" class="btn btn-outline" id="btn-cancel-movie">Hủy</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Movies Table -->
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên Phim</th>
+              <th>Thể Loại</th>
+              <th>Thời Lượng</th>
+              <th>Khởi Chiếu</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody id="admin-movies-body">
+            <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang tải danh sách phim...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3. Bookings Section -->
+    <section id="sec-bookings" class="admin-section">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Toàn Bộ Đơn Đặt Vé</h3>
+          <span style="font-size:0.85rem;color:var(--text-muted);">Cập nhật tự động</span>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Mã Đơn Vé</th>
+              <th>Khách Hàng</th>
+              <th>Số Điện Thoại</th>
+              <th>Phim</th>
+              <th>Suất Chiếu</th>
+              <th>Tổng Tiền</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody id="admin-all-bookings-body">
+            <tr><td colspan="7" class="placeholder-text" style="text-align:center;">Đang tải đơn đặt vé...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. QR Check-in Section -->
+    <section id="sec-checkin" class="admin-section">
+      <div class="checkin-card">
+        <h3 style="color:#fff;text-align:center;">Soát Vé Tại Cửa Rạp</h3>
+        <p style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-top:4px;">
+          Nhập mã đặt vé in trên vé điện tử hoặc quét mã QR từ thiết bị của khách
+        </p>
+
+        <form id="form-checkin">
+          <div class="checkin-input-group">
+            <input type="text" id="input-checkin-code" required placeholder="Nhập mã vé (ví dụ: BK-2026-DUNE01)" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.85rem 1rem;border-radius:8px;font-family:monospace;font-size:1.1rem;">
+            <button type="submit" class="btn btn-primary" id="btn-checkin-submit">Kiểm Tra</button>
+          </div>
+        </form>
+
+        <div id="checkin-result-box" class="checkin-result"></div>
+      </div>
+    </section>
   </main>
 
+  <script src="../js/common.js"></script>
   <script src="../js/api.js"></script>
+  <script src="../js/auth.js"></script>
   <script src="../js/admin.js"></script>
 </body>
 </html>

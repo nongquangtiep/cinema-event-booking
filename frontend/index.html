@@ -7,13 +7,14 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
       <nav class="nav-links">
         <a href="index.html" class="active">Trang Chủ</a>
-        <a href="#movies-now">Phim Đang Chiếu</a>
-        <a href="#movies-soon">Phim Sắp Chiếu</a>
+        <a href="#movies-section" onclick="filterTab('now_showing')">Phim Đang Chiếu</a>
+        <a href="#movies-section" onclick="filterTab('coming_soon')">Phim Sắp Chiếu</a>
         <a href="my-bookings.html">Vé Của Tôi</a>
       </nav>
       <div class="nav-auth">
@@ -22,30 +23,46 @@
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero-banner">
-      <div class="hero-content">
-        <span class="badge">Bom tấn nổi bật</span>
-        <h1>Trải nghiệm Điện ảnh Đỉnh cao</h1>
-        <p>Đặt vé nhanh chóng, chọn ghế dễ dàng, thanh toán an toàn tiện lợi.</p>
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="container hero-content">
+      <span class="badge">Đại tiệc Điện ảnh</span>
+      <h1>Trải Nghiệm Điện Ảnh Đỉnh Cao</h1>
+      <p>Đặt vé trực tuyến nhanh chóng, chọn vị trí ghế đắc địa với trải nghiệm rạp chuẩn quốc tế.</p>
+      <div style="display:flex;gap:1rem;">
+        <a href="#movies-section" class="btn btn-primary">Khám Phá Phim Ngay</a>
+        <a href="my-bookings.html" class="btn btn-outline">Tra Cứu Vé</a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="movies-now" class="movie-section">
-      <h2 class="section-title">Phim Đang Chiếu</h2>
-      <div class="movie-grid" id="movies-grid">
-        <!-- Render dynamically via js/app.js -->
-        <p class="placeholder-text">Đang tải danh sách phim...</p>
+  <!-- Movies Section -->
+  <main class="container" id="movies-section">
+    <div class="controls-bar">
+      <div class="tabs-group">
+        <button class="tab-btn active" id="tab-now" onclick="filterTab('now_showing')">Phim Đang Chiếu</button>
+        <button class="tab-btn" id="tab-soon" onclick="filterTab('coming_soon')">Phim Sắp Chiếu</button>
+        <button class="tab-btn" id="tab-all" onclick="filterTab('all')">Tất Cả</button>
       </div>
-    </section>
+
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Tìm tên phim, sự kiện...">
+      </div>
+    </div>
+
+    <div class="movie-grid" id="movies-grid">
+      <p class="placeholder-text">Đang tải danh sách phim từ hệ thống...</p>
+    </div>
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
     </div>
   </footer>
 
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/app.js"></script>

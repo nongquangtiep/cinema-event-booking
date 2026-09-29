@@ -5,46 +5,62 @@
 .admin-layout {
   display: flex;
   min-height: 100vh;
+  background-color: var(--bg-primary);
 }
 
 .admin-sidebar {
-  width: 260px;
+  width: 270px;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
-  padding: 1.5rem;
+  padding: 1.75rem 1.25rem;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .sidebar-brand {
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
+  padding: 0 0.5rem;
 }
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex-grow: 1;
 }
 
+.sidebar-menu button,
 .sidebar-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  font-weight: 500;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
   transition: var(--transition);
 }
 
+.sidebar-menu button:hover,
 .sidebar-menu a:hover,
-.sidebar-menu a.active {
+.sidebar-menu button.active {
   background-color: var(--bg-card);
-  color: var(--accent-red);
+  color: #fff;
+  border-left: 3px solid var(--accent-red);
 }
 
 .admin-main {
   flex: 1;
-  padding: 2rem;
-  background-color: var(--bg-primary);
+  padding: 2.5rem;
+  overflow-y: auto;
 }
 
 .admin-header {
@@ -56,22 +72,127 @@
   margin-bottom: 2rem;
 }
 
-.stats-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
+.admin-header h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #fff;
 }
 
-.card {
-  background-color: var(--bg-card);
+.admin-section {
+  display: none;
+}
+
+.admin-section.active {
+  display: block;
+}
+
+/* Stat Cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, var(--bg-card), var(--bg-secondary));
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-number {
-  font-size: 2rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--accent-gold);
   margin-top: 0.5rem;
+}
+
+/* Data Tables */
+.table-container {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 2rem;
+}
+
+.table-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.92rem;
+}
+
+.admin-table th {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table td {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  color: #e2e8f0;
+}
+
+.admin-table tr:hover td {
+  background-color: var(--bg-card-hover);
+}
+
+/* Check-in Box */
+.checkin-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.checkin-input-group {
+  display: flex;
+  gap: 0.75rem;
+  margin: 1.25rem 0;
+}
+
+.checkin-result {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 10px;
+  display: none;
+}
+
+.checkin-result.success {
+  display: block;
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--accent-emerald);
+  color: #34d399;
+}
+
+.checkin-result.error {
+  display: block;
+  background-color: rgba(225, 29, 72, 0.1);
+  border: 1px solid var(--accent-red);
+  color: #fb7185;
 }

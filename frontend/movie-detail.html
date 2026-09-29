@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
@@ -20,11 +21,29 @@
     </div>
   </header>
 
-  <main class="container movie-detail-container" id="movie-detail-view">
-    <p class="placeholder-text">Đang tải thông tin chi tiết phim và lịch chiếu...</p>
+  <main class="container">
+    <div id="movie-detail-view">
+      <p class="placeholder-text" style="padding:4rem 0;">Đang tải thông tin chi tiết phim...</p>
+    </div>
+
+    <!-- Showtimes Section -->
+    <section class="showtimes-section">
+      <h2 style="font-size:1.6rem;margin-bottom:1.5rem;border-left:4px solid var(--accent-red);padding-left:12px;">Lịch Chiếu & Suất Chiếu</h2>
+      <div id="showtimes-container">
+        <p class="placeholder-text">Đang tải lịch chiếu...</p>
+      </div>
+    </section>
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/movie-detail.js"></script>
 </body>
 </html>

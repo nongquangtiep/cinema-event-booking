@@ -3,66 +3,98 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thanh Toán Mô Phỏng - CineWave</title>
+  <title>Xác Nhận & Thanh Toán - CineWave</title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/seat-map.css">
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
       <div class="timer-box">
-        <span>Giữ ghế còn: </span>
-        <strong id="countdown-checkout">05:00</strong>
+        <span>Thời gian giữ ghế còn:</span>
+        <strong id="checkout-timer">05:00</strong>
+      </div>
+      <div class="nav-auth">
+        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
       </div>
     </div>
   </header>
 
-  <main class="container checkout-container">
-    <h2>Xác Nhận & Thanh Toán Mô Phỏng</h2>
+  <main class="container">
     <div class="checkout-grid">
-      <div class="customer-info-box">
-        <h3>Thông Tin Người Nhận Vé</h3>
+      <!-- Customer & Payment Form -->
+      <div class="checkout-box">
+        <h3>1. Thông Tin Người Nhận Vé</h3>
         <form id="checkout-form">
           <div class="form-group">
-            <label for="cust-name">Họ và Tên</label>
-            <input type="text" id="cust-name" required placeholder="Nguyễn Văn A">
+            <label for="cust-name">Họ và Tên *</label>
+            <input type="text" id="cust-name" required placeholder="Ví dụ: Nguyễn Văn An">
           </div>
           <div class="form-group">
-            <label for="cust-email">Email Nhận Vé</label>
-            <input type="email" id="cust-email" required placeholder="example@gmail.com">
+            <label for="cust-email">Địa Chỉ Email Nhận Vé *</label>
+            <input type="email" id="cust-email" required placeholder="Ví dụ: an.nguyen@example.com">
           </div>
           <div class="form-group">
-            <label for="cust-phone">Số Điện Thoại</label>
-            <input type="tel" id="cust-phone" required placeholder="0912345678">
+            <label for="cust-phone">Số Điện Thoại Nhận Mã *</label>
+            <input type="tel" id="cust-phone" required placeholder="Ví dụ: 0901234567">
           </div>
 
-          <h3>Phương Thức Thanh Toán (Mô phỏng Sandbox)</h3>
+          <h3 style="margin-top:2rem;">2. Phương Thức Thanh Toán (Mô Phỏng Sandbox)</h3>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">
+            * Đây là môi trường kiểm thử mô phỏng thanh toán, không trừ tiền thực tế.
+          </p>
+
           <div class="payment-options">
             <label class="payment-radio">
-              <input type="radio" name="payment_method" value="mock_vnpay" checked>
-              <span>VNPAY-QR (Mô phỏng)</span>
+              <input type="radio" name="payment_method" value="VNPAY_QR" checked>
+              <div>
+                <strong>Cổng VNPAY-QR (Mô phỏng)</strong>
+                <p style="font-size:0.8rem;color:var(--text-muted);">Quét mã QR thanh toán tức thì</p>
+              </div>
             </label>
+
             <label class="payment-radio">
-              <input type="radio" name="payment_method" value="mock_momo">
-              <span>Ví Điện Tử MoMo (Mô phỏng)</span>
+              <input type="radio" name="payment_method" value="MOMO">
+              <div>
+                <strong>Ví Điện Tử MoMo (Mô phỏng)</strong>
+                <p style="font-size:0.8rem;color:var(--text-muted);">Xác thực nhanh qua ví điện tử</p>
+              </div>
             </label>
+
             <label class="payment-radio">
-              <input type="radio" name="payment_method" value="mock_atm">
-              <span>Thẻ ATM / Internet Banking (Mô phỏng)</span>
+              <input type="radio" name="payment_method" value="ATM">
+              <div>
+                <strong>Thẻ ATM / Tài Khoản Ngân Hàng (Mô phỏng)</strong>
+                <p style="font-size:0.8rem;color:var(--text-muted);">Thanh toán qua cổng Internet Banking</p>
+              </div>
             </label>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block" id="btn-pay">Xác Nhận Thanh Toán</button>
+          <button type="submit" id="btn-submit-payment" class="btn btn-primary btn-block" style="padding:0.9rem;font-size:1.05rem;">
+            Xác Nhận & Thanh Toán Ngay
+          </button>
         </form>
       </div>
 
-      <div class="order-summary-box" id="order-summary">
+      <!-- Order Summary Card -->
+      <aside class="checkout-box" id="order-summary-box">
         <h3>Tóm Tắt Đơn Hàng</h3>
-        <p class="placeholder-text">Đang tải thông tin đơn hàng...</p>
-      </div>
+        <div id="checkout-summary-content">
+          <p class="placeholder-text">Đang tải thông tin đơn hàng...</p>
+        </div>
+      </aside>
     </div>
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/checkout.js"></script>

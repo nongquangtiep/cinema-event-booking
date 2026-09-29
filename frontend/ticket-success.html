@@ -5,8 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vé Điện Tử - CineWave</title>
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    @media print {
+      .navbar, .ticket-actions, .footer { display: none !important; }
+      body { background-color: #fff !important; color: #000 !important; }
+      .ticket-card { box-shadow: none !important; border: 1px solid #000 !important; margin: 0 auto; }
+      .ticket-row span, .ticket-row strong { color: #000 !important; }
+    }
+  </style>
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
@@ -17,26 +26,35 @@
   <main class="container ticket-view-container">
     <div class="ticket-card" id="ticket-card">
       <div class="ticket-header">
-        <span class="badge success">Đặt Vé Thành Công</span>
-        <h2>Vé Xem Phim Điện Tử</h2>
-        <p class="booking-code" id="ticket-code">Mã vé: Đang tải...</p>
+        <span class="badge success">Đã Thanh Toán Thành Công</span>
+        <h2 style="margin-top:0.75rem;font-size:1.5rem;color:#fff;">VÉ XEM PHIM ĐIỆN TỬ</h2>
+        <div class="ticket-code" id="ticket-code">Mã: Đang tải...</div>
       </div>
 
-      <div class="ticket-body" id="ticket-body">
+      <div class="ticket-body" id="ticket-details">
         <p class="placeholder-text">Đang tải thông tin chi tiết vé...</p>
       </div>
 
-      <div class="ticket-qr" id="ticket-qr">
-        <!-- Render QR Image dynamically -->
+      <!-- QR Code Box -->
+      <div class="ticket-qr" id="ticket-qr-container">
+        <img id="qr-image" src="" alt="Mã QR Soát Vé" style="display:none;">
+        <p>Quét mã QR tại cửa rạp để vào xem phim</p>
       </div>
 
       <div class="ticket-actions">
-        <button class="btn btn-primary" onclick="window.print()">In Vé / Tải PDF</button>
-        <a href="index.html" class="btn btn-outline">Đặt Thêm Vé Khác</a>
+        <button class="btn btn-primary" onclick="window.print()" style="flex:1;">In Vé / Lưu PDF</button>
+        <a href="index.html" class="btn btn-outline" style="flex:1;">Đặt Thêm Vé</a>
       </div>
     </div>
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ticket.js"></script>
 </body>

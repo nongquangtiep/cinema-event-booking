@@ -1,40 +1,66 @@
 /**
  * CineWave API Client
- * Wraps Fetch API for backend communication via Nginx reverse proxy
+ * Wraps Fetch API with relative path /api and Bearer authorization
  */
 
 const API_BASE_URL = '/api';
 
 const api = {
-  async get(endpoint) {
+  async request(endpoint, options = {}) {
     const token = localStorage.getItem('cinewave_token');
-    const headers = { 'Content-Type': 'application/json' };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    };
 
-    const res = await fetch(`${API_BASE_URL}${endpoint}`, { headers });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ message: 'Lỗi mạng hoặc server' }));
-      throw new Error(err.message || `HTTP ${res.status}`);
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
     }
-    return res.json();
+
+    const config = {
+      ...options,
+      headers
+    };
+
+    try {
+      const res = await fetch(`${API_BASE_URL}${endpoint}`, config);
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        const error = new Error((data && data.error) || `Lỗi HTTP ${res.status}`);
+        error.status = res.status;
+        error.data = data;
+        throw error;
+      }
+
+      return data;
+    } catch (err) {
+      if (!err.status) {
+        err.message = 'Không thể kết nối đến máy chủ API. Vui lòng thử lại sau.';
+      }
+      throw err;
+    }
   },
 
-  async post(endpoint, data) {
-    const token = localStorage.getItem('cinewave_token');
-    const headers = { 'Content-Type': 'application/json' };
-    if (token) headers['Authorization'] = `Bearer ${token}`;
+  get(endpoint) {
+    return this.request(endpoint, { method: 'GET' });
+  },
 
-    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+  post(endpoint, body) {
+    return this.request(endpoint, {
       method: 'POST',
-      headers,
-      body: JSON.stringify(data)
+      body: JSON.stringify(body)
     });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ message: 'Lỗi mạng hoặc server' }));
-      const error = new Error(err.message || `HTTP ${res.status}`);
-      error.status = res.status;
-      throw error;
-    }
-    return res.json();
+  },
+
+  put(endpoint, body) {
+    return this.request(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(body)
+    });
+  },
+
+  delete(endpoint) {
+    return this.request(endpoint, { method: 'DELETE' });
   }
 };

@@ -8,17 +8,24 @@
   <link rel="stylesheet" href="css/seat-map.css">
 </head>
 <body class="dark-theme">
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo">Cine<span>Wave</span></a>
-      <div class="timer-box" id="timer-box" style="display:none;">
-        <span>Thời gian giữ ghế: </span>
-        <strong id="countdown">05:00</strong>
+      <div id="hold-timer-container" style="display:none;">
+        <div class="timer-box">
+          <span>Thời gian giữ ghế:</span>
+          <strong id="timer-display">05:00</strong>
+        </div>
+      </div>
+      <div class="nav-auth">
+        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
       </div>
     </div>
   </header>
 
   <main class="container seat-layout">
+    <!-- Seat Matrix Container -->
     <div class="seat-container">
       <div class="screen-box">
         <div class="screen-curve"></div>
@@ -26,29 +33,68 @@
       </div>
 
       <div class="seat-matrix" id="seat-matrix">
-        <!-- Rendered by js/seat-selection.js -->
         <p class="placeholder-text">Đang tải sơ đồ ghế phòng chiếu...</p>
       </div>
 
+      <!-- Seat Legend -->
       <div class="seat-legend">
-        <div class="legend-item"><span class="seat-sample available"></span> Ghế Trống</div>
+        <div class="legend-item"><span class="seat-sample available"></span> Ghế Thường</div>
+        <div class="legend-item"><span class="seat-sample vip"></span> Ghế VIP</div>
+        <div class="legend-item"><span class="seat-sample couple"></span> Ghế Đôi (Couple)</div>
         <div class="legend-item"><span class="seat-sample selected"></span> Đang Chọn</div>
-        <div class="legend-item"><span class="seat-sample locked"></span> Đang Giữ (Locked)</div>
+        <div class="legend-item"><span class="seat-sample locked"></span> Đang Giữ Chỗ</div>
         <div class="legend-item"><span class="seat-sample booked"></span> Đã Bán</div>
-        <div class="legend-item"><span class="seat-sample vip"></span> VIP</div>
-        <div class="legend-item"><span class="seat-sample couple"></span> Ghế Đôi</div>
       </div>
     </div>
 
+    <!-- Booking Summary Sidebar -->
     <aside class="booking-summary-panel">
       <h3>Thông Tin Đặt Vé</h3>
-      <div id="summary-content">
-        <p>Vui lòng chọn ghế trên sơ đồ</p>
+      
+      <div class="summary-detail" id="summary-detail">
+        <div class="summary-row">
+          <span>Phim:</span>
+          <strong id="summary-movie">Đang tải...</strong>
+        </div>
+        <div class="summary-row">
+          <span>Rạp / Phòng:</span>
+          <strong id="summary-hall">...</strong>
+        </div>
+        <div class="summary-row">
+          <span>Suất chiếu:</span>
+          <strong id="summary-time">...</strong>
+        </div>
+        <div class="summary-row">
+          <span>Ghế đã chọn:</span>
+          <div class="selected-seats-chips" id="selected-chips">
+            <span style="color:var(--text-muted);font-size:0.85rem;">Chưa chọn ghế nào</span>
+          </div>
+        </div>
       </div>
-      <button id="btn-proceed-checkout" class="btn btn-primary btn-block" disabled>Tiếp Tục Thanh Toán</button>
+
+      <div class="total-price-box">
+        <span>Tổng thanh toán:</span>
+        <strong id="total-price">0 đ</strong>
+      </div>
+
+      <div class="summary-actions">
+        <button id="btn-hold-proceed" class="btn btn-primary btn-block" disabled>
+          Giữ Ghế & Tiếp Tục
+        </button>
+        <button id="btn-release-seats" class="btn btn-outline btn-block" style="display:none;">
+          Hủy Giữ Ghế
+        </button>
+      </div>
     </aside>
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/common.js"></script>
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/seat-selection.js"></script>
