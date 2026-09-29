@@ -1,6 +1,6 @@
 /**
  * Database Connection Pool Configuration
- * Phase 1: Skeleton configuration
+ * Uses mysql2/promise with connection pooling and environment variables
  */
 
 const mysql = require('mysql2/promise');
@@ -13,7 +13,26 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME || 'cinema_db',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 10000
 });
 
-module.exports = pool;
+/**
+ * Helper to test database connectivity
+ */
+async function testConnection() {
+  try {
+    const connection = await pool.getConnection();
+    await connection.ping();
+    connection.release();
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+module.exports = {
+  pool,
+  testConnection
+};

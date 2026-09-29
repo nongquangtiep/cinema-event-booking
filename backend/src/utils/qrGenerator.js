@@ -1,26 +1,32 @@
 /**
  * QR Code Generator Utility
- * Generates Data URL QR code for e-tickets
+ * Generates Base64 Data URL QR Code for Cinema E-Tickets
  */
 
 const QRCode = require('qrcode');
 
 /**
- * Generate QR code as Base64 Data URL
- * @param {string} text - Content to encode in QR
- * @returns {Promise<string>} - Base64 Data URL
+ * Generate QR code as Base64 Data URL string
+ * @param {string} text - Payload to encode
+ * @returns {Promise<string>} Base64 Data URL (image/png)
  */
 async function generateQRCode(text) {
   try {
     return await QRCode.toDataURL(text, {
-      errorCorrectionLevel: 'H',
+      errorCorrectionLevel: 'M',
       type: 'image/png',
       margin: 1,
-      width: 256
+      width: 250,
+      color: {
+        dark: '#000000',
+        light: '#ffffff'
+      }
     });
   } catch (err) {
-    throw new Error(`Failed to generate QR code: ${err.message}`);
+    throw new Error(`QR generation failed: ${err.message}`);
   }
 }
 
-module.exports = { generateQRCode };
+module.exports = {
+  generateQRCode
+};
