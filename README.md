@@ -120,11 +120,24 @@ Browser Client / Admin
    ```bash
    cp .env.example .env
    ```
-2. Khởi động toàn bộ dịch vụ (chỉ thực hiện ở các Phase sau):
+2. Khởi động dịch vụ Database (Phase 2):
    ```bash
-   docker compose up -d
+   docker compose up -d mysql phpmyadmin
    ```
-3. Truy cập ứng dụng:
-   - Website người dùng: `http://<IP-Host>/`
-   - Quản trị Database: `http://127.0.0.1:8081`
-   - Bảng điều khiển Grafana: `http://127.0.0.1:3000`
+3. Truy cập phpMyAdmin:
+   - URL: `http://127.0.0.1:8081` (Chỉ mở trên Localhost VM)
+   - Server: `mysql`
+   - Username: `cinema_user` (hoặc `root`)
+   - Password: `cinema_secret_password` (hoặc `cinema_root_super_secret`)
+
+---
+
+## 9. Danh sách Tài khoản Kiểm thử (Test Accounts)
+Hệ thống đã nạp sẵn dữ liệu mẫu trong Phase 2, mật khẩu được băm một chiều bằng Bcrypt 10 rounds:
+
+| Username | Email | Mật khẩu | Vai trò | Họ và tên |
+| :--- | :--- | :--- | :---: | :--- |
+| `admin` | `admin@cinewave.vn` | `admin123` | **admin** | Quản Trị Viên Hệ Thống |
+| `nguyenvanan` | `an.nguyen@example.com` | `user123` | **user** | Nguyễn Văn An |
+| `tranthibich` | `bich.tran@example.com` | `user123` | **user** | Trần Thị Bích |
+

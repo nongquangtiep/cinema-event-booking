@@ -93,6 +93,12 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
     deploy:
       resources:
         limits:
@@ -113,7 +119,8 @@ services:
     networks:
       - backend-net
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     deploy:
       resources:
         limits:
