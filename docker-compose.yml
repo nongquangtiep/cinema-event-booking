@@ -1,8 +1,6 @@
 # Docker Compose Configuration - Cinema & Event Booking System
 # Phase 1: Skeleton configuration - DO NOT RUN 'docker compose up' in Phase 1
 
-version: '3.8'
-
 networks:
   frontend-net:
     driver: bridge
@@ -38,6 +36,12 @@ services:
       - monitoring-net
     depends_on:
       - app
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:80/nginx-health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
     deploy:
       resources:
         limits:
