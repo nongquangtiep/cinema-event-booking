@@ -14,8 +14,13 @@ function errorHandler(err, req, res, next) {
   });
 
   const statusCode = err.status || err.statusCode || 500;
+  const isProd = process.env.NODE_ENV === 'production';
+  const responseMessage = (statusCode === 500 && isProd)
+    ? 'Lỗi hệ thống nội bộ'
+    : (err.message || 'Lỗi hệ thống nội bộ');
+
   res.status(statusCode).json({
-    error: err.message || 'Lỗi hệ thống nội bộ',
+    error: responseMessage,
     status: statusCode
   });
 }

@@ -26,9 +26,9 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors());
 
-// Body Parsers
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Body Parsers with size limits
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
 // Metrics Collection Middleware
 app.use(metricsMiddleware);

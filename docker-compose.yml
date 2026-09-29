@@ -84,7 +84,7 @@ services:
       resources:
         limits:
           cpus: '0.75'
-          memory: 256M
+          memory: 512M
 
   # 3. MySQL Database
   mysql:
@@ -158,7 +158,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 256M
+          memory: 512M
 
   # 6. Grafana (Dashboard Visualizer)
   grafana:
@@ -183,7 +183,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 256M
+          memory: 512M
 
   # 7. Grafana Loki (Log Aggregation)
   loki:
@@ -202,7 +202,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 256M
+          memory: 512M
 
   # 8. Promtail (Log Shipper)
   promtail:

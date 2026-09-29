@@ -28,16 +28,17 @@ async function holdSeats(req, res, next) {
     connection = await pool.getConnection();
     await connection.beginTransaction();
 
-    // 1. Clean up any expired locks for this showtime
-    await connection.execute(
-      'DELETE FROM seat_locks WHERE showtime_id = ? AND locked_until <= NOW()',
-      [showtime_id]
+    const placeholders = seat_ids.map(() => '?').join(',');
+
+    // 1. Clean up any expired locks for these specific seats
+    await connection.query(
+      `DELETE FROM seat_locks WHERE showtime_id = ? AND seat_id IN (${placeholders}) AND locked_until <= NOW()`,
+      [showtime_id, ...seat_ids]
     );
 
     // 2. Check if any seat is already booked (paid)
-    const placeholders = seat_ids.map(() => '?').join(',');
     const [alreadyBooked] = await connection.query(
-      `SELECT seat_id FROM booking_seats WHERE showtime_id = ? AND seat_id IN (${placeholders}) FOR UPDATE`,
+      `SELECT seat_id FROM booking_seats WHERE showtime_id = ? AND seat_id IN (${placeholders})`,
       [showtime_id, ...seat_ids]
     );
 
@@ -54,7 +55,7 @@ async function holdSeats(req, res, next) {
     const [lockedByOthers] = await connection.query(
       `SELECT seat_id FROM seat_locks 
        WHERE showtime_id = ? AND seat_id IN (${placeholders}) 
-         AND session_id != ? AND locked_until > NOW() FOR UPDATE`,
+         AND session_id != ? AND locked_until > NOW()`,
       [showtime_id, ...seat_ids, session_id]
     );
 
@@ -93,7 +94,35 @@ async function holdSeats(req, res, next) {
       session_id
     });
   } catch (err) {
-    if (connection) await connection.rollback();
+    if (connection) {
+      try {
+        await connection.rollback();
+      } catch (rbErr) {
+        // Rollback may already be triggered by deadlock
+      }
+    }
+
+    // Handle concurrent lock conflict, deadlock, timeout, or duplicate entry as HTTP 409
+    if (
+      err.code === 'ER_LOCK_DEADLOCK' ||
+      err.errno === 1213 ||
+      err.code === 'ER_LOCK_WAIT_TIMEOUT' ||
+      err.errno === 1205 ||
+      err.code === 'ER_DUP_ENTRY' ||
+      err.errno === 1062
+    ) {
+      logger.warn('Concurrent seat lock race condition detected - returning 409 Conflict', {
+        showtime_id,
+        seat_ids,
+        session_id,
+        error: err.code
+      });
+      return res.status(409).json({
+        error: 'Một hoặc nhiều ghế đang được giữ bởi người khác.',
+        conflict_seat_ids: seat_ids
+      });
+    }
+
     next(err);
   } finally {
     if (connection) connection.release();
@@ -271,10 +300,17 @@ async function confirmPayment(req, res, next) {
           [booking.id, booking.showtime_id, seat.id, seatPrice]
         );
       } catch (insertErr) {
-        // Catch duplicate key on unique_showtime_seat
-        if (insertErr.code === 'ER_DUP_ENTRY' || insertErr.errno === 1062) {
+        // Catch duplicate key on unique_showtime_seat or concurrency contention
+        if (
+          insertErr.code === 'ER_DUP_ENTRY' ||
+          insertErr.errno === 1062 ||
+          insertErr.code === 'ER_LOCK_DEADLOCK' ||
+          insertErr.errno === 1213 ||
+          insertErr.code === 'ER_LOCK_WAIT_TIMEOUT' ||
+          insertErr.errno === 1205
+        ) {
           await connection.rollback();
-          logger.warn('Double booking prevented by UNIQUE constraint!', {
+          logger.warn('Double booking prevented by UNIQUE constraint or lock conflict!', {
             booking_id: booking.id,
             showtime_id: booking.showtime_id,
             seat_id: seat.id
