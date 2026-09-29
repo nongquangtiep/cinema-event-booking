@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - CineWave</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="dark-theme admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <a href="../index.html" class="logo">Cine<span>Admin</span></a>
+    </div>
+    <nav class="sidebar-menu">
+      <a href="#stats" class="active">Báo Cáo Thống Kê</a>
+      <a href="#movies">Quản Lý Phim</a>
+      <a href="#showtimes">Quản Lý Suất Chiếu</a>
+      <a href="#bookings">Quản Lý Đơn Vé</a>
+      <a href="#checkin">Soát Vé (Check-in QR)</a>
+      <a href="../index.html">Xem Trang Web</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <h2>Bảng Điều Khiển Quản Trị</h2>
+      <div id="admin-user-info">Admin Account</div>
+    </header>
+
+    <div class="admin-content" id="admin-content">
+      <div class="stats-cards">
+        <div class="card stat-card">
+          <h4>Tổng Doanh Thu</h4>
+          <p class="stat-number" id="stat-revenue">0 đ</p>
+        </div>
+        <div class="card stat-card">
+          <h4>Vé Đã Bán</h4>
+          <p class="stat-number" id="stat-tickets">0</p>
+        </div>
+        <div class="card stat-card">
+          <h4>Phim Đang Chiếu</h4>
+          <p class="stat-number" id="stat-movies">0</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>

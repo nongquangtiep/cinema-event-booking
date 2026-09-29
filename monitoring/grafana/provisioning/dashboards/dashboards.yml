@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'Cinema System Dashboards'
+    orgId: 1
+    folder: 'Cinema Dashboards'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards/definitions

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng Nhập / Đăng Ký - CineWave</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark-theme auth-body">
+  <div class="auth-card">
+    <a href="index.html" class="logo">Cine<span>Wave</span></a>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login">Đăng Nhập</button>
+      <button class="auth-tab" id="tab-register">Đăng Ký</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" class="auth-form">
+      <div class="form-group">
+        <label for="login-username">Tài khoản hoặc Email</label>
+        <input type="text" id="login-username" required placeholder="admin hoặc user@gmail.com">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Mật khẩu</label>
+        <input type="password" id="login-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Đăng Nhập</button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="register-form" class="auth-form" style="display:none;">
+      <div class="form-group">
+        <label for="reg-name">Họ và Tên</label>
+        <input type="text" id="reg-name" required placeholder="Nguyễn Văn A">
+      </div>
+      <div class="form-group">
+        <label for="reg-username">Tên đăng nhập</label>
+        <input type="text" id="reg-username" required placeholder="nguyenvana">
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <input type="email" id="reg-email" required placeholder="example@gmail.com">
+      </div>
+      <div class="form-group">
+        <label for="reg-password">Mật khẩu</label>
+        <input type="password" id="reg-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Tạo Tài Khoản</button>
+    </form>
+    <div id="auth-alert" class="auth-alert"></div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

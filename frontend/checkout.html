@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thanh Toán Mô Phỏng - CineWave</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark-theme">
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <div class="timer-box">
+        <span>Giữ ghế còn: </span>
+        <strong id="countdown-checkout">05:00</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="container checkout-container">
+    <h2>Xác Nhận & Thanh Toán Mô Phỏng</h2>
+    <div class="checkout-grid">
+      <div class="customer-info-box">
+        <h3>Thông Tin Người Nhận Vé</h3>
+        <form id="checkout-form">
+          <div class="form-group">
+            <label for="cust-name">Họ và Tên</label>
+            <input type="text" id="cust-name" required placeholder="Nguyễn Văn A">
+          </div>
+          <div class="form-group">
+            <label for="cust-email">Email Nhận Vé</label>
+            <input type="email" id="cust-email" required placeholder="example@gmail.com">
+          </div>
+          <div class="form-group">
+            <label for="cust-phone">Số Điện Thoại</label>
+            <input type="tel" id="cust-phone" required placeholder="0912345678">
+          </div>
+
+          <h3>Phương Thức Thanh Toán (Mô phỏng Sandbox)</h3>
+          <div class="payment-options">
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="mock_vnpay" checked>
+              <span>VNPAY-QR (Mô phỏng)</span>
+            </label>
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="mock_momo">
+              <span>Ví Điện Tử MoMo (Mô phỏng)</span>
+            </label>
+            <label class="payment-radio">
+              <input type="radio" name="payment_method" value="mock_atm">
+              <span>Thẻ ATM / Internet Banking (Mô phỏng)</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="btn-pay">Xác Nhận Thanh Toán</button>
+        </form>
+      </div>
+
+      <div class="order-summary-box" id="order-summary">
+        <h3>Tóm Tắt Đơn Hàng</h3>
+        <p class="placeholder-text">Đang tải thông tin đơn hàng...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

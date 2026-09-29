@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineWave - Hệ thống Đặt vé Xem phim & Sự kiện</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark-theme">
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <nav class="nav-links">
+        <a href="index.html" class="active">Trang Chủ</a>
+        <a href="#movies-now">Phim Đang Chiếu</a>
+        <a href="#movies-soon">Phim Sắp Chiếu</a>
+        <a href="my-bookings.html">Vé Của Tôi</a>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-banner">
+      <div class="hero-content">
+        <span class="badge">Bom tấn nổi bật</span>
+        <h1>Trải nghiệm Điện ảnh Đỉnh cao</h1>
+        <p>Đặt vé nhanh chóng, chọn ghế dễ dàng, thanh toán an toàn tiện lợi.</p>
+      </div>
+    </section>
+
+    <section id="movies-now" class="movie-section">
+      <h2 class="section-title">Phim Đang Chiếu</h2>
+      <div class="movie-grid" id="movies-grid">
+        <!-- Render dynamically via js/app.js -->
+        <p class="placeholder-text">Đang tải danh sách phim...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CineWave. Đề tài 11 - Triển khai và Quản trị Hệ thống Phần mềm.</p>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

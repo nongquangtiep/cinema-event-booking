@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chọn Ghế - CineWave</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/seat-map.css">
+</head>
+<body class="dark-theme">
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <div class="timer-box" id="timer-box" style="display:none;">
+        <span>Thời gian giữ ghế: </span>
+        <strong id="countdown">05:00</strong>
+      </div>
+    </div>
+  </header>
+
+  <main class="container seat-layout">
+    <div class="seat-container">
+      <div class="screen-box">
+        <div class="screen-curve"></div>
+        <p class="screen-label">MÀN HÌNH CHIẾU</p>
+      </div>
+
+      <div class="seat-matrix" id="seat-matrix">
+        <!-- Rendered by js/seat-selection.js -->
+        <p class="placeholder-text">Đang tải sơ đồ ghế phòng chiếu...</p>
+      </div>
+
+      <div class="seat-legend">
+        <div class="legend-item"><span class="seat-sample available"></span> Ghế Trống</div>
+        <div class="legend-item"><span class="seat-sample selected"></span> Đang Chọn</div>
+        <div class="legend-item"><span class="seat-sample locked"></span> Đang Giữ (Locked)</div>
+        <div class="legend-item"><span class="seat-sample booked"></span> Đã Bán</div>
+        <div class="legend-item"><span class="seat-sample vip"></span> VIP</div>
+        <div class="legend-item"><span class="seat-sample couple"></span> Ghế Đôi</div>
+      </div>
+    </div>
+
+    <aside class="booking-summary-panel">
+      <h3>Thông Tin Đặt Vé</h3>
+      <div id="summary-content">
+        <p>Vui lòng chọn ghế trên sơ đồ</p>
+      </div>
+      <button id="btn-proceed-checkout" class="btn btn-primary btn-block" disabled>Tiếp Tục Thanh Toán</button>
+    </aside>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/seat-selection.js"></script>
+</body>
+</html>

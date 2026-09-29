@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vé Của Tôi & Tra Cứu - CineWave</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark-theme">
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <nav class="nav-links">
+        <a href="index.html">Trang Chủ</a>
+        <a href="my-bookings.html" class="active">Vé Của Tôi</a>
+      </nav>
+      <div class="nav-auth">
+        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-bookings-container">
+    <h2>Tra Cứu & Lịch Sử Đặt Vé</h2>
+    <div class="search-ticket-box">
+      <input type="text" id="lookup-code" placeholder="Nhập mã đặt vé (ví dụ: BK-...)">
+      <button class="btn btn-primary" id="btn-lookup">Tra Cứu Vé</button>
+    </div>
+
+    <div class="tickets-list" id="tickets-list">
+      <p class="placeholder-text">Nhập mã vé ở trên hoặc đăng nhập để xem danh sách vé đã đặt.</p>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

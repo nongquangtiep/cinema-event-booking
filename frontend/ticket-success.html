@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vé Điện Tử - CineWave</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="dark-theme">
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <a href="index.html" class="btn btn-outline">Về Trang Chủ</a>
+    </div>
+  </header>
+
+  <main class="container ticket-view-container">
+    <div class="ticket-card" id="ticket-card">
+      <div class="ticket-header">
+        <span class="badge success">Đặt Vé Thành Công</span>
+        <h2>Vé Xem Phim Điện Tử</h2>
+        <p class="booking-code" id="ticket-code">Mã vé: Đang tải...</p>
+      </div>
+
+      <div class="ticket-body" id="ticket-body">
+        <p class="placeholder-text">Đang tải thông tin chi tiết vé...</p>
+      </div>
+
+      <div class="ticket-qr" id="ticket-qr">
+        <!-- Render QR Image dynamically -->
+      </div>
+
+      <div class="ticket-actions">
+        <button class="btn btn-primary" onclick="window.print()">In Vé / Tải PDF</button>
+        <a href="index.html" class="btn btn-outline">Đặt Thêm Vé Khác</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/ticket.js"></script>
+</body>
+</html>
