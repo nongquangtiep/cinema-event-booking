@@ -4,6 +4,7 @@ datasources:
   # Prometheus Time-series Metrics Datasource
   - name: Prometheus
     type: prometheus
+    uid: prometheus
     access: proxy
     url: http://prometheus:9090
     isDefault: true
@@ -12,6 +13,7 @@ datasources:
   # Loki Centralized Log Datasource
   - name: Loki
     type: loki
+    uid: loki
     access: proxy
     url: http://loki:3100
     isDefault: false

@@ -17,19 +17,7 @@ scrape_configs:
           - localhost
         labels:
           job: nginx
-          __path__: /var/log/nginx/access.log
-    pipeline_stages:
-      - json:
-          expressions:
-            timestamp: timestamp
-            remote_addr: remote_addr
-            status: status
-            request_uri: request_uri
-            request_method: request_method
-            request_time: request_time
-      - labels:
-          status:
-          request_method:
+          __path__: /var/log/nginx/access_json.log
 
   # 2. Scrape Docker Container logs
   - job_name: docker
@@ -38,7 +26,19 @@ scrape_configs:
         refresh_interval: 5s
     relabel_configs:
       - source_labels: ['__meta_docker_container_name']
-        regex: '/(.*)'
+        regex: '/cinema-.*'
+        action: keep
+      - source_labels: ['__meta_docker_container_name']
+        regex: '.*'
+        target_label: 'job'
+        replacement: 'docker'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/cinema-(.*)'
         target_label: 'container_name'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
       - source_labels: ['__meta_docker_container_log_stream']
         target_label: 'stream'
+    pipeline_stages:
+      - docker: {}

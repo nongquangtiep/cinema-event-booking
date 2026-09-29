@@ -13,11 +13,11 @@
       "id": 1,
       "title": "Request Rate (req/s)",
       "type": "timeseries",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "sum(rate(http_requests_total[1m]))",
-          "legendFormat": "RPS",
+          "legendFormat": "RPS Total",
           "refId": "A"
         }
       ]
@@ -26,13 +26,13 @@
       "collapsed": false,
       "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
       "id": 2,
-      "title": "Error Rate (5xx/4xx req/s)",
+      "title": "Error Rate (4xx / 5xx req/s)",
       "type": "timeseries",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "sum(rate(http_requests_total{status=~\"[45]..\"}[1m]))",
-          "legendFormat": "Errors/sec",
+          "legendFormat": "Errors / sec",
           "refId": "A"
         }
       ]
@@ -41,13 +41,28 @@
       "collapsed": false,
       "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
       "id": 3,
-      "title": "Latency P95 (seconds)",
+      "title": "P95 Request Latency (seconds)",
       "type": "timeseries",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (le))",
           "legendFormat": "P95 Latency",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 7 },
+      "id": 4,
+      "title": "Requests Breakdown by Method & Route",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        {
+          "expr": "sum(rate(http_requests_total[1m])) by (method, route)",
+          "legendFormat": "{{method}} {{route}}",
           "refId": "A"
         }
       ]

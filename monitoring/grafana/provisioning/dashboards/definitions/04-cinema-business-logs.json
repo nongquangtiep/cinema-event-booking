@@ -13,7 +13,7 @@
       "id": 1,
       "title": "Tickets Booked Total",
       "type": "stat",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "cinema_tickets_booked_total",
@@ -27,7 +27,7 @@
       "id": 2,
       "title": "Accumulated Revenue (VND)",
       "type": "stat",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "cinema_revenue_total_vnd",
@@ -41,7 +41,7 @@
       "id": 3,
       "title": "Active Seat Locks",
       "type": "gauge",
-      "datasource": "Prometheus",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
         {
           "expr": "cinema_active_seat_locks",
@@ -51,14 +51,28 @@
     },
     {
       "collapsed": false,
-      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 6 },
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 6 },
       "id": 4,
-      "title": "Live Logs Stream (Loki)",
+      "title": "Application Logs (Node.js/Express)",
       "type": "logs",
-      "datasource": "Loki",
+      "datasource": { "type": "loki", "uid": "loki" },
       "targets": [
         {
-          "expr": "{job=~\"nginx|docker\"}",
+          "expr": "{container_name=\"app\"}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 6 },
+      "id": 5,
+      "title": "Nginx Web Access Logs",
+      "type": "logs",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [
+        {
+          "expr": "{job=\"nginx\"}",
           "refId": "A"
         }
       ]
