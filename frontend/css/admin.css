@@ -1,26 +1,54 @@
 /* ==========================================================================
-   CineWave - Admin Dashboard Stylesheet
+   CineWave - Admin Dashboard Stylesheet (Standard Fixed Sidebar Layout)
    ========================================================================== */
 
+/* 1. Base Layout & Reset */
+body.dark-theme.admin-layout,
+body.admin-layout,
 .admin-layout {
-  display: flex;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
   min-height: 100vh;
+  width: 100%;
   background-color: var(--bg-primary);
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
+/* 2. Fixed Sidebar (260px width, spans full viewport height) */
 .admin-sidebar {
-  width: 270px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  height: 100vh;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   padding: 1.75rem 1.25rem;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  z-index: 1000;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .sidebar-brand {
   margin-bottom: 2.25rem;
   padding: 0 0.5rem;
+}
+
+.sidebar-brand .logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+}
+
+.sidebar-brand .logo span {
+  color: var(--accent-red);
 }
 
 .sidebar-menu {
@@ -47,6 +75,7 @@
   font-size: 0.92rem;
   cursor: pointer;
   transition: var(--transition);
+  box-sizing: border-box;
 }
 
 .sidebar-menu button:hover,
@@ -57,12 +86,18 @@
   border-left: 3px solid var(--accent-red);
 }
 
+/* 3. Main Content Area (Immediately aligns with top of viewport) */
 .admin-main {
-  flex: 1;
-  padding: 2.5rem;
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+  padding: 2rem 2.5rem;
+  background-color: var(--bg-primary);
+  box-sizing: border-box;
   overflow-y: auto;
 }
 
+/* 4. Top Header: Title on Left, Admin Info on Right */
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -76,8 +111,23 @@
   font-size: 1.75rem;
   font-weight: 800;
   color: #fff;
+  margin: 0;
 }
 
+#admin-profile {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#admin-profile strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* 5. Sections */
 .admin-section {
   display: none;
 }
@@ -86,10 +136,10 @@
   display: block;
 }
 
-/* Stat Cards */
+/* 6. Four Stat Cards on a single row (Desktop) */
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 2.5rem;
 }
@@ -100,6 +150,12 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .stat-card h4 {
@@ -108,16 +164,17 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
 }
 
 .stat-number {
   font-size: 1.85rem;
   font-weight: 800;
   color: var(--accent-gold);
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 
-/* Data Tables */
+/* 7. Data Tables */
 .table-container {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -133,6 +190,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.table-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
 }
 
 .admin-table {
@@ -160,20 +224,21 @@
   background-color: var(--bg-card-hover);
 }
 
-/* Check-in Box */
+/* 8. Check-in Gate Card */
 .checkin-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 2rem;
-  max-width: 600px;
-  margin: 0 auto;
+  padding: 2.25rem;
+  max-width: 620px;
+  margin: 1.5rem auto;
+  box-shadow: var(--shadow-md);
 }
 
 .checkin-input-group {
   display: flex;
   gap: 0.75rem;
-  margin: 1.25rem 0;
+  margin: 1.5rem 0;
 }
 
 .checkin-result {
@@ -185,14 +250,62 @@
 
 .checkin-result.success {
   display: block;
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: rgba(16, 185, 129, 0.12);
   border: 1px solid var(--accent-emerald);
   color: #34d399;
 }
 
 .checkin-result.error {
   display: block;
-  background-color: rgba(225, 29, 72, 0.1);
+  background-color: rgba(225, 29, 72, 0.12);
   border: 1px solid var(--accent-red);
   color: #fb7185;
+}
+
+/* 9. Responsive Breakpoints */
+@media (max-width: 1200px) {
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+  }
+
+  .admin-main {
+    margin-left: 0;
+    width: 100%;
+    padding: 1.5rem 1rem;
+  }
+
+  .sidebar-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .sidebar-menu button,
+  .sidebar-menu a {
+    width: auto;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
 }

@@ -12,7 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  document.getElementById('admin-name').textContent = user.full_name || user.username;
+  // Clean display name immediately (resolving any stale cached mojibake in localStorage)
+  let displayName = user.full_name || user.username;
+  if (displayName && (displayName.includes('Quá') || displayName.includes('Ã'))) {
+    displayName = 'Quản Trị Viên Hệ Thống';
+  }
+  document.getElementById('admin-name').textContent = displayName;
+
+  // Always sync fresh profile from /api/auth/me to update client localStorage
+  api.get('/auth/me').then(res => {
+    if (res && res.user) {
+      auth.setSession(auth.getToken(), res.user);
+      document.getElementById('admin-name').textContent = res.user.full_name || res.user.username;
+    }
+  }).catch(() => {});
 
   // Sidebar Tab Navigation
   document.querySelectorAll('.sidebar-menu button.menu-item').forEach(btn => {

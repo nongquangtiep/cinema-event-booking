@@ -11,6 +11,7 @@ const pool = mysql.createPool({
   user: process.env.DB_USER || 'cinema_user',
   password: process.env.DB_PASS || 'cinema_secret_password',
   database: process.env.DB_NAME || 'cinema_db',
+  charset: 'utf8mb4',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

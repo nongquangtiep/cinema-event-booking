@@ -4,8 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng Điều Khiển Quản Trị - CineWave</title>
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/main.css?v=2026100101">
+  <link rel="stylesheet" href="../css/admin.css?v=2026100101">
+  <style>
+    /* Critical Fixed Sidebar Layout - Bypasses any browser CSS cache */
+    body.dark-theme.admin-layout,
+    body.admin-layout,
+    .admin-layout {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: 100vh !important;
+      width: 100% !important;
+      background-color: var(--bg-primary, #0b0e14) !important;
+      overflow-x: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    .admin-sidebar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: 260px !important;
+      height: 100vh !important;
+      background-color: var(--bg-secondary, #151a23) !important;
+      border-right: 1px solid var(--border-color, #2e384d) !important;
+      padding: 1.75rem 1.25rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      z-index: 1000 !important;
+      overflow-y: auto !important;
+      box-sizing: border-box !important;
+    }
+
+    .admin-main {
+      margin-left: 260px !important;
+      width: calc(100% - 260px) !important;
+      min-height: 100vh !important;
+      padding: 2rem 2.5rem !important;
+      background-color: var(--bg-primary, #0b0e14) !important;
+      box-sizing: border-box !important;
+      overflow-y: auto !important;
+    }
+
+    .admin-header {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding-bottom: 1.5rem !important;
+      border-bottom: 1px solid var(--border-color, #2e384d) !important;
+      margin-bottom: 2rem !important;
+    }
+
+    .stats-cards {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 1.5rem !important;
+      margin-bottom: 2.5rem !important;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-cards {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-sidebar {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color, #2e384d) !important;
+        padding: 1rem 1.25rem !important;
+      }
+      .admin-main {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 1.5rem 1rem !important;
+      }
+      .stats-cards {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
 </head>
 <body class="dark-theme admin-layout">
   <!-- Sidebar -->
@@ -199,9 +283,9 @@
     </section>
   </main>
 
-  <script src="../js/common.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/auth.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/common.js?v=2026100102"></script>
+  <script src="../js/api.js?v=2026100102"></script>
+  <script src="../js/auth.js?v=2026100102"></script>
+  <script src="../js/admin.js?v=2026100102"></script>
 </body>
 </html>

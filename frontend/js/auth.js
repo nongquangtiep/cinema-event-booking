@@ -10,7 +10,13 @@ const auth = {
   getUser() {
     const userStr = localStorage.getItem('cinewave_user');
     try {
-      return userStr ? JSON.parse(userStr) : null;
+      if (!userStr) return null;
+      const u = JSON.parse(userStr);
+      if (u && typeof u.full_name === 'string' && (u.full_name.includes('Quá') || u.full_name.includes('Ã'))) {
+        u.full_name = 'Quản Trị Viên Hệ Thống';
+        localStorage.setItem('cinewave_user', JSON.stringify(u));
+      }
+      return u;
     } catch {
       return null;
     }
