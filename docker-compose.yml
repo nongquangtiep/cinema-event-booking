@@ -122,7 +122,7 @@ services:
     container_name: cinema-phpmyadmin
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8081:80"
+      - "8081:80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -144,7 +144,7 @@ services:
     container_name: cinema-prometheus
     restart: unless-stopped
     ports:
-      - "127.0.0.1:9090:9090"
+      - "9090:9090"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -166,7 +166,7 @@ services:
     container_name: cinema-grafana
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3000:3000"
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin123}
@@ -191,7 +191,7 @@ services:
     container_name: cinema-loki
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3100:3100"
+      - "3100:3100"
     volumes:
       - ./monitoring/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
       - loki_data:/loki
