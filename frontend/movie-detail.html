@@ -4,19 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chi Tiết Phim - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
 </head>
 <body class="dark-theme">
   <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <a href="index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+        Cine<span>Wave</span>
+      </a>
       <nav class="nav-links">
-        <a href="index.html">Trang Chủ</a>
-        <a href="my-bookings.html">Vé Của Tôi</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+        <a href="my-bookings.html"><i class="fa-solid fa-ticket"></i> Vé Của Tôi</a>
       </nav>
       <div class="nav-auth">
-        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+        <a href="login.html" class="btn btn-outline" id="auth-btn"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</a>
       </div>
     </div>
   </header>
@@ -28,7 +32,9 @@
 
     <!-- Showtimes Section -->
     <section class="showtimes-section">
-      <h2 style="font-size:1.6rem;margin-bottom:1.5rem;border-left:4px solid var(--accent-red);padding-left:12px;">Lịch Chiếu & Suất Chiếu</h2>
+      <h2 style="font-size:1.6rem;margin-bottom:1.5rem;border-left:4px solid var(--accent-red);padding-left:12px;">
+        <i class="fa-solid fa-calendar-check" style="color:var(--accent-red);margin-right:8px;"></i>Lịch Chiếu & Suất Chiếu
+      </h2>
       <div id="showtimes-container">
         <p class="placeholder-text">Đang tải lịch chiếu...</p>
       </div>
@@ -41,9 +47,9 @@
     </div>
   </footer>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/movie-detail.js"></script>
+  <script src="js/common.js?v=2.2"></script>
+  <script src="js/api.js?v=2.2"></script>
+  <script src="js/auth.js?v=2.2"></script>
+  <script src="js/movie-detail.js?v=2.2"></script>
 </body>
 </html>

@@ -4,20 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xác Nhận & Thanh Toán - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/seat-map.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
+  <link rel="stylesheet" href="css/seat-map.css?v=2.2">
 </head>
 <body class="dark-theme">
   <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <a href="index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+        Cine<span>Wave</span>
+      </a>
       <div class="timer-box">
-        <span>Thời gian giữ ghế còn:</span>
+        <span><i class="fa-solid fa-stopwatch" style="color:var(--accent-red);margin-right:4px;"></i> Thời gian giữ ghế còn:</span>
         <strong id="checkout-timer">05:00</strong>
       </div>
       <div class="nav-auth">
-        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+        <a href="login.html" class="btn btn-outline" id="auth-btn"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</a>
       </div>
     </div>
   </header>
@@ -26,45 +30,48 @@
     <div class="checkout-grid">
       <!-- Customer & Payment Form -->
       <div class="checkout-box">
-        <h3>1. Thông Tin Người Nhận Vé</h3>
+        <h3><i class="fa-solid fa-id-card" style="color:var(--accent-red);margin-right:8px;"></i>1. Thông Tin Người Nhận Vé</h3>
         <form id="checkout-form">
           <div class="form-group">
-            <label for="cust-name">Họ và Tên *</label>
+            <label for="cust-name"><i class="fa-solid fa-user-pen"></i> Họ và Tên *</label>
             <input type="text" id="cust-name" required placeholder="Ví dụ: Nguyễn Văn An">
           </div>
           <div class="form-group">
-            <label for="cust-email">Địa Chỉ Email Nhận Vé *</label>
+            <label for="cust-email"><i class="fa-solid fa-envelope"></i> Địa Chỉ Email Nhận Vé *</label>
             <input type="email" id="cust-email" required placeholder="Ví dụ: an.nguyen@example.com">
           </div>
           <div class="form-group">
-            <label for="cust-phone">Số Điện Thoại Nhận Mã *</label>
+            <label for="cust-phone"><i class="fa-solid fa-phone"></i> Số Điện Thoại Nhận Mã *</label>
             <input type="tel" id="cust-phone" required placeholder="Ví dụ: 0901234567">
           </div>
 
-          <h3 style="margin-top:2rem;">2. Phương Thức Thanh Toán (Mô Phỏng Sandbox)</h3>
+          <h3 style="margin-top:2rem;"><i class="fa-solid fa-credit-card" style="color:var(--accent-red);margin-right:8px;"></i>2. Phương Thức Thanh Toán (Mô Phỏng Sandbox)</h3>
           <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.75rem;">
             * Đây là môi trường kiểm thử mô phỏng thanh toán, không trừ tiền thực tế.
           </p>
 
           <div class="payment-options">
-            <label class="payment-radio">
+            <label class="payment-radio" style="display:flex;align-items:center;gap:12px;">
               <input type="radio" name="payment_method" value="VNPAY_QR" checked>
+              <i class="fa-solid fa-qrcode" style="font-size:1.4rem;color:var(--accent-blue);"></i>
               <div>
                 <strong>Cổng VNPAY-QR (Mô phỏng)</strong>
                 <p style="font-size:0.8rem;color:var(--text-muted);">Quét mã QR thanh toán tức thì</p>
               </div>
             </label>
 
-            <label class="payment-radio">
+            <label class="payment-radio" style="display:flex;align-items:center;gap:12px;">
               <input type="radio" name="payment_method" value="MOMO">
+              <i class="fa-solid fa-wallet" style="font-size:1.4rem;color:#ec4899;"></i>
               <div>
                 <strong>Ví Điện Tử MoMo (Mô phỏng)</strong>
                 <p style="font-size:0.8rem;color:var(--text-muted);">Xác thực nhanh qua ví điện tử</p>
               </div>
             </label>
 
-            <label class="payment-radio">
+            <label class="payment-radio" style="display:flex;align-items:center;gap:12px;">
               <input type="radio" name="payment_method" value="ATM">
+              <i class="fa-solid fa-building-columns" style="font-size:1.4rem;color:var(--accent-gold);"></i>
               <div>
                 <strong>Thẻ ATM / Tài Khoản Ngân Hàng (Mô phỏng)</strong>
                 <p style="font-size:0.8rem;color:var(--text-muted);">Thanh toán qua cổng Internet Banking</p>
@@ -72,15 +79,24 @@
             </label>
           </div>
 
-          <button type="submit" id="btn-submit-payment" class="btn btn-primary btn-block" style="padding:0.9rem;font-size:1.05rem;">
-            Xác Nhận & Thanh Toán Ngay
+          <!-- Digital Signature & Terms Confirmation -->
+          <div class="signature-box">
+            <i class="fa-solid fa-file-signature"></i>
+            <div class="signature-box-content">
+              <h5><i class="fa-solid fa-pen-nib"></i> Cam Kết & Chữ Ký Điện Tử Xác Nhận Đặt Vé</h5>
+              <p>Bằng việc tiếp tục, quý khách xác nhận thông tin vé và cam kết tuân thủ chính sách phòng vé CineWave.</p>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit-payment" class="btn btn-primary btn-block" style="padding:0.9rem;font-size:1.05rem;margin-top:1.5rem;">
+            <i class="fa-solid fa-signature"></i> Xác Nhận & Thanh Toán Ngay
           </button>
         </form>
       </div>
 
       <!-- Order Summary Card -->
       <aside class="checkout-box" id="order-summary-box">
-        <h3>Tóm Tắt Đơn Hàng</h3>
+        <h3><i class="fa-solid fa-receipt" style="color:var(--accent-red);margin-right:8px;"></i>Tóm Tắt Đơn Hàng</h3>
         <div id="checkout-summary-content">
           <p class="placeholder-text">Đang tải thông tin đơn hàng...</p>
         </div>
@@ -94,9 +110,9 @@
     </div>
   </footer>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/checkout.js"></script>
+  <script src="js/common.js?v=2.2"></script>
+  <script src="js/api.js?v=2.2"></script>
+  <script src="js/auth.js?v=2.2"></script>
+  <script src="js/checkout.js?v=2.2"></script>
 </body>
 </html>

@@ -37,16 +37,17 @@ async function loadRecentBookings() {
         <div class="card" style="background-color:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1.25rem;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
             <span class="badge ${b.payment_status === 'paid' ? 'success' : 'muted'}">
+              <i class="fa-solid ${b.payment_status === 'paid' ? 'fa-circle-check' : 'fa-clock'}"></i>
               ${b.payment_status === 'paid' ? 'Đã Thanh Toán' : 'Đang Chờ'}
             </span>
             <code style="font-size:0.85rem;color:var(--accent-gold);">${b.booking_code}</code>
           </div>
-          <h4 style="font-size:1.1rem;color:#fff;margin-bottom:0.5rem;">${b.movie_title}</h4>
-          <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.3rem;">Rạp: ${b.cinema_name} (${b.hall_name})</p>
-          <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;">Suất: ${formatTimeOnly(b.start_time)} - ${formatDate(b.start_time)}</p>
+          <h4 style="font-size:1.1rem;color:var(--text-primary);margin-bottom:0.5rem;">${b.movie_title}</h4>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:0.3rem;"><i class="fa-solid fa-location-dot" style="color:var(--accent-red);margin-right:4px;"></i>Rạp: ${b.cinema_name} (${b.hall_name})</p>
+          <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1rem;"><i class="fa-regular fa-clock" style="color:var(--accent-red);margin-right:4px;"></i>Suất: ${formatTimeOnly(b.start_time)} - ${formatDate(b.start_time)}</p>
           <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-color);padding-top:0.75rem;">
             <strong style="color:var(--accent-gold);">${formatCurrency(b.total_amount)}</strong>
-            <a href="ticket-success.html?code=${b.booking_code}" class="btn btn-outline" style="padding:0.35rem 0.75rem;font-size:0.85rem;">Xem Vé</a>
+            <a href="ticket-success.html?code=${b.booking_code}" class="btn btn-outline" style="padding:0.35rem 0.75rem;font-size:0.85rem;"><i class="fa-solid fa-ticket"></i> Xem Vé</a>
           </div>
         </div>
       `);

@@ -4,182 +4,196 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng Điều Khiển Quản Trị - CineWave</title>
-  <link rel="stylesheet" href="../css/main.css?v=2026100101">
-  <link rel="stylesheet" href="../css/admin.css?v=2026100101">
-  <style>
-    /* Critical Fixed Sidebar Layout - Bypasses any browser CSS cache */
-    body.dark-theme.admin-layout,
-    body.admin-layout,
-    .admin-layout {
-      display: block !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      min-height: 100vh !important;
-      width: 100% !important;
-      background-color: var(--bg-primary, #0b0e14) !important;
-      overflow-x: hidden !important;
-      box-sizing: border-box !important;
-    }
-
-    .admin-sidebar {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      bottom: 0 !important;
-      width: 260px !important;
-      height: 100vh !important;
-      background-color: var(--bg-secondary, #151a23) !important;
-      border-right: 1px solid var(--border-color, #2e384d) !important;
-      padding: 1.75rem 1.25rem !important;
-      display: flex !important;
-      flex-direction: column !important;
-      z-index: 1000 !important;
-      overflow-y: auto !important;
-      box-sizing: border-box !important;
-    }
-
-    .admin-main {
-      margin-left: 260px !important;
-      width: calc(100% - 260px) !important;
-      min-height: 100vh !important;
-      padding: 2rem 2.5rem !important;
-      background-color: var(--bg-primary, #0b0e14) !important;
-      box-sizing: border-box !important;
-      overflow-y: auto !important;
-    }
-
-    .admin-header {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      padding-bottom: 1.5rem !important;
-      border-bottom: 1px solid var(--border-color, #2e384d) !important;
-      margin-bottom: 2rem !important;
-    }
-
-    .stats-cards {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 1.5rem !important;
-      margin-bottom: 2.5rem !important;
-    }
-
-    @media (max-width: 1200px) {
-      .stats-cards {
-        grid-template-columns: repeat(2, 1fr) !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .admin-sidebar {
-        position: relative !important;
-        width: 100% !important;
-        height: auto !important;
-        min-height: auto !important;
-        border-right: none !important;
-        border-bottom: 1px solid var(--border-color, #2e384d) !important;
-        padding: 1rem 1.25rem !important;
-      }
-      .admin-main {
-        margin-left: 0 !important;
-        width: 100% !important;
-        padding: 1.5rem 1rem !important;
-      }
-      .stats-cards {
-        grid-template-columns: 1fr !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../css/main.css?v=2.3">
+  <link rel="stylesheet" href="../css/admin.css?v=2.3">
 </head>
 <body class="dark-theme admin-layout">
   <!-- Sidebar -->
   <aside class="admin-sidebar">
     <div class="sidebar-brand">
-      <a href="../index.html" class="logo">Cine<span>Admin</span></a>
-      <p style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Management Portal</p>
+      <a href="../index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-shield-halved"></i></span>
+        <div class="brand-text-group">
+          <span class="brand-name">Cine<span>Admin</span></span>
+          <span class="brand-sub">Management Portal</span>
+        </div>
+      </a>
     </div>
 
+    <div class="sidebar-section-label">ĐIỀU HÀNH RẠP CHIẾU</div>
     <nav class="sidebar-menu">
-      <button class="menu-item active" data-target="sec-stats">📊 Báo Cáo Thống Kê</button>
-      <button class="menu-item" data-target="sec-movies">🎬 Quản Lý Phim</button>
-      <button class="menu-item" data-target="sec-bookings">🎟️ Danh Sách Vé Đặt</button>
-      <button class="menu-item" data-target="sec-checkin">🔍 Soát Vé (Check-in)</button>
-      <div style="margin-top:auto;border-top:1px solid var(--border-color);padding-top:1rem;">
-        <a href="../index.html" style="color:var(--text-muted);">← Xem Website Khách</a>
-        <button id="admin-logout-btn" style="color:var(--accent-red);margin-top:0.5rem;">🚪 Đăng Xuất</button>
-      </div>
+      <button class="menu-item active" data-target="sec-stats">
+        <span class="menu-icon"><i class="fa-solid fa-chart-pie"></i></span>
+        <span>Báo Cáo Thống Kê</span>
+      </button>
+      <button class="menu-item" data-target="sec-movies">
+        <span class="menu-icon"><i class="fa-solid fa-film"></i></span>
+        <span>Quản Lý Phim</span>
+      </button>
+      <button class="menu-item" data-target="sec-bookings">
+        <span class="menu-icon"><i class="fa-solid fa-ticket"></i></span>
+        <span>Danh Sách Vé Đặt</span>
+      </button>
+      <button class="menu-item" data-target="sec-checkin">
+        <span class="menu-icon"><i class="fa-solid fa-qrcode"></i></span>
+        <span>Soát Vé (Check-in)</span>
+      </button>
     </nav>
+
+    <!-- Sidebar Bottom Footer -->
+    <div class="sidebar-footer">
+      <div class="system-status-pill">
+        <span class="pulse-indicator"></span>
+        <span class="status-text">Docker Cluster: Healthy</span>
+      </div>
+      <div class="sidebar-footer-actions">
+        <a href="../index.html" class="btn-sidebar-link" title="Xem Website Khách Hàng">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Xem Website Khách</span>
+        </a>
+        <button id="admin-logout-btn" class="btn-sidebar-logout" title="Đăng Xuất">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span>Đăng Xuất</span>
+        </button>
+      </div>
+    </div>
   </aside>
 
   <!-- Main Content -->
   <main class="admin-main">
     <header class="admin-header">
-      <h2 id="section-title">Báo Cáo Thống Kê</h2>
-      <div id="admin-profile" style="color:var(--text-secondary);font-size:0.9rem;">
-        Admin: <strong id="admin-name" style="color:#fff;">...</strong>
+      <div class="header-left">
+        <div class="breadcrumb">
+          <span><i class="fa-solid fa-house"></i> CineWave</span>
+          <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+          <span class="breadcrumb-active" id="breadcrumb-current">Báo Cáo Thống Kê</span>
+        </div>
+        <h2 id="section-title">
+          <i class="fa-solid fa-chart-pie" style="color:var(--accent-red);margin-right:8px;"></i>Báo Cáo Thống Kê
+        </h2>
+      </div>
+
+      <div class="header-right">
+        <button id="btn-refresh-stats" class="btn-header-tool" title="Tải lại số liệu mới nhất">
+          <i class="fa-solid fa-arrows-rotate"></i>
+          <span>Làm Mới</span>
+        </button>
+        <button class="theme-toggle-btn" id="admin-theme-btn" title="Chuyển đổi giao diện Sáng / Tối">
+          <i class="fa-solid fa-sun"></i>
+        </button>
+        <div class="admin-user-card" id="admin-profile">
+          <div class="admin-avatar">AD</div>
+          <div class="admin-user-info">
+            <strong id="admin-name">Quản Trị Viên</strong>
+            <span class="admin-role-tag">SUPER ADMIN</span>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- 1. Stats Section -->
     <section id="sec-stats" class="admin-section active">
       <div class="stats-cards">
-        <div class="stat-card">
-          <h4>Tổng Doanh Thu (Đã Thu)</h4>
-          <p class="stat-number" id="kpi-revenue">0 đ</p>
+        <div class="stat-card card-revenue">
+          <div class="stat-card-header">
+            <span class="stat-label">Tổng Doanh Thu</span>
+            <span class="stat-icon-box bg-gold"><i class="fa-solid fa-sack-dollar"></i></span>
+          </div>
+          <p class="stat-number text-gold" id="kpi-revenue">0 đ</p>
+          <div class="stat-badge trend-up">
+            <i class="fa-solid fa-arrow-trend-up"></i> Doanh thu thực tế đã thu
+          </div>
+          <div class="stat-footer-bar bar-gold"></div>
         </div>
-        <div class="stat-card">
-          <h4>Vé Đã Bán Ra</h4>
-          <p class="stat-number" id="kpi-tickets" style="color:var(--accent-emerald);">0</p>
+
+        <div class="stat-card card-tickets">
+          <div class="stat-card-header">
+            <span class="stat-label">Vé Đã Xuất Bán</span>
+            <span class="stat-icon-box bg-emerald"><i class="fa-solid fa-ticket"></i></span>
+          </div>
+          <p class="stat-number text-emerald" id="kpi-tickets">0</p>
+          <div class="stat-badge trend-up">
+            <i class="fa-solid fa-circle-check"></i> Tỷ lệ lấp đầy ổn định
+          </div>
+          <div class="stat-footer-bar bar-emerald"></div>
         </div>
-        <div class="stat-card">
-          <h4>Phim Đang Chiếu</h4>
-          <p class="stat-number" id="kpi-movies" style="color:var(--accent-blue);">0</p>
+
+        <div class="stat-card card-movies">
+          <div class="stat-card-header">
+            <span class="stat-label">Phim Đang Chiếu</span>
+            <span class="stat-icon-box bg-blue"><i class="fa-solid fa-film"></i></span>
+          </div>
+          <p class="stat-number text-blue" id="kpi-movies">0</p>
+          <div class="stat-badge trend-neutral">
+            <i class="fa-solid fa-clapperboard"></i> Đang mở bán vé
+          </div>
+          <div class="stat-footer-bar bar-blue"></div>
         </div>
-        <div class="stat-card">
-          <h4>Tài Khoản Khách Hàng</h4>
-          <p class="stat-number" id="kpi-users" style="color:var(--accent-purple);">0</p>
+
+        <div class="stat-card card-users">
+          <div class="stat-card-header">
+            <span class="stat-label">Tài Khoản Khách Hàng</span>
+            <span class="stat-icon-box bg-purple"><i class="fa-solid fa-users"></i></span>
+          </div>
+          <p class="stat-number text-purple" id="kpi-users">0</p>
+          <div class="stat-badge trend-up">
+            <i class="fa-solid fa-user-shield"></i> Xác thực tài khoản an toàn
+          </div>
+          <div class="stat-footer-bar bar-purple"></div>
         </div>
       </div>
 
       <div class="table-container">
         <div class="table-header">
-          <h3 style="font-size:1.1rem;color:#fff;">Đơn Đặt Vé Gần Đây Nhất</h3>
+          <div class="table-header-left">
+            <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--accent-red);margin-right:8px;"></i>Đơn Đặt Vé Gần Đây Nhất</h3>
+            <span class="record-counter-badge" id="recent-counter">0 đơn vé</span>
+          </div>
+          <div class="table-header-right">
+            <div class="table-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="recent-search-input" placeholder="Tìm mã vé, khách hàng, tên phim...">
+            </div>
+          </div>
         </div>
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Mã Đơn Vé</th>
-              <th>Khách Hàng</th>
-              <th>Phim</th>
-              <th>Tổng Tiền</th>
-              <th>Trạng Thái</th>
-              <th>Thời Gian</th>
-            </tr>
-          </thead>
-          <tbody id="recent-bookings-body">
-            <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang nạp dữ liệu...</td></tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Mã Đơn Vé</th>
+                <th>Khách Hàng</th>
+                <th>Phim & Sự Kiện</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái</th>
+                <th>Thời Gian Giao Dịch</th>
+              </tr>
+            </thead>
+            <tbody id="recent-bookings-body">
+              <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang nạp dữ liệu...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <!-- 2. Movies Management Section -->
     <section id="sec-movies" class="admin-section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
-        <h3>Danh Sách Phim & Sự Kiện</h3>
-        <button class="btn btn-primary" id="btn-toggle-movie-form">+ Thêm Phim Mới</button>
+        <h3><i class="fa-solid fa-film" style="color:var(--accent-red);margin-right:8px;"></i>Danh Sách Phim & Sự Kiện</h3>
+        <button class="btn btn-primary" id="btn-toggle-movie-form"><i class="fa-solid fa-plus"></i> Thêm Phim Mới</button>
       </div>
 
       <!-- Add Movie Modal / Form -->
       <div id="movie-form-box" class="card" style="display:none;margin-bottom:2rem;padding:1.5rem;background-color:var(--bg-card);">
-        <h4 style="margin-bottom:1rem;color:#fff;">Thêm Phim Mới Vào Hệ Thống</h4>
+        <h4 style="margin-bottom:1rem;color:var(--text-primary);"><i class="fa-solid fa-clapperboard" style="color:var(--accent-red);margin-right:6px;"></i>Thêm Phim Mới Vào Hệ Thống</h4>
         <form id="form-add-movie" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
           <div class="form-group" style="grid-column: span 2;">
-            <label>Tên Phim / Sự Kiện *</label>
+            <label><i class="fa-solid fa-film"></i> Tên Phim / Sự Kiện *</label>
             <input type="text" id="m-title" required placeholder="Ví dụ: Avatar: Dòng Chảy Của Nước">
           </div>
           <div class="form-group">
-            <label>Danh Mục *</label>
+            <label><i class="fa-solid fa-tags"></i> Danh Mục *</label>
             <select id="m-category" required>
               <option value="1">Hành Động & Khoa Học Viễn Tưởng</option>
               <option value="2">Hoạt Hình & Phiêu Lưu Gia Đình</option>
@@ -188,52 +202,66 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Thời Lượng (Phút) *</label>
+            <label><i class="fa-regular fa-clock"></i> Thời Lượng (Phút) *</label>
             <input type="number" id="m-duration" required placeholder="120" value="120">
           </div>
           <div class="form-group">
-            <label>Ngày Khởi Chiếu *</label>
+            <label><i class="fa-regular fa-calendar-days"></i> Ngày Khởi Chiếu *</label>
             <input type="date" id="m-release" required>
           </div>
           <div class="form-group">
-            <label>Trạng Thái *</label>
+            <label><i class="fa-solid fa-toggle-on"></i> Trạng Thái *</label>
             <select id="m-status" required>
               <option value="now_showing">Đang Chiếu (now_showing)</option>
               <option value="coming_soon">Sắp Chiếu (coming_soon)</option>
             </select>
           </div>
           <div class="form-group" style="grid-column: span 2;">
-            <label>URL Ảnh Poster (Link hình ảnh)</label>
+            <label><i class="fa-solid fa-image"></i> URL Ảnh Poster (Link hình ảnh)</label>
             <input type="url" id="m-poster" placeholder="https://example.com/poster.jpg">
           </div>
           <div class="form-group" style="grid-column: span 2;">
-            <label>Tóm Tắt Nội Dung Phim</label>
-            <textarea id="m-desc" rows="3" style="width:100%;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.75rem;border-radius:8px;"></textarea>
+            <label><i class="fa-solid fa-file-lines"></i> Tóm Tắt Nội Dung Phim</label>
+            <textarea id="m-desc" rows="3" style="width:100%;background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-primary);padding:0.75rem;border-radius:8px;"></textarea>
           </div>
           <div style="grid-column: span 2;display:flex;gap:1rem;">
-            <button type="submit" class="btn btn-primary">Lưu Phim Mới</button>
-            <button type="button" class="btn btn-outline" id="btn-cancel-movie">Hủy</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Lưu Phim Mới</button>
+            <button type="button" class="btn btn-outline" id="btn-cancel-movie"><i class="fa-solid fa-xmark"></i> Hủy</button>
           </div>
         </form>
       </div>
 
       <!-- Movies Table -->
       <div class="table-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên Phim</th>
-              <th>Thể Loại</th>
-              <th>Thời Lượng</th>
-              <th>Khởi Chiếu</th>
-              <th>Trạng Thái</th>
-            </tr>
-          </thead>
-          <tbody id="admin-movies-body">
-            <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang tải danh sách phim...</td></tr>
-          </tbody>
-        </table>
+        <div class="table-header">
+          <div class="table-header-left">
+            <h3><i class="fa-solid fa-list-check" style="color:var(--accent-red);margin-right:8px;"></i>Danh Sách Phim Hệ Thống</h3>
+            <span class="record-counter-badge" id="movies-counter">0 phim</span>
+          </div>
+          <div class="table-header-right">
+            <div class="table-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="movies-search-input" placeholder="Tìm tên phim, thể loại...">
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên Phim & Áp Phích</th>
+                <th>Thể Loại</th>
+                <th>Thời Lượng</th>
+                <th>Khởi Chiếu</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="admin-movies-body">
+              <tr><td colspan="6" class="placeholder-text" style="text-align:center;">Đang tải danh sách phim...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -241,40 +269,50 @@
     <section id="sec-bookings" class="admin-section">
       <div class="table-container">
         <div class="table-header">
-          <h3>Toàn Bộ Đơn Đặt Vé</h3>
-          <span style="font-size:0.85rem;color:var(--text-muted);">Cập nhật tự động</span>
+          <div class="table-header-left">
+            <h3><i class="fa-solid fa-ticket" style="color:var(--accent-red);margin-right:8px;"></i>Toàn Bộ Đơn Đặt Vé</h3>
+            <span class="record-counter-badge" id="bookings-counter">0 đơn vé</span>
+          </div>
+          <div class="table-header-right">
+            <div class="table-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="bookings-search-input" placeholder="Tìm mã vé, SĐT, khách hàng...">
+            </div>
+          </div>
         </div>
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Mã Đơn Vé</th>
-              <th>Khách Hàng</th>
-              <th>Số Điện Thoại</th>
-              <th>Phim</th>
-              <th>Suất Chiếu</th>
-              <th>Tổng Tiền</th>
-              <th>Trạng Thái</th>
-            </tr>
-          </thead>
-          <tbody id="admin-all-bookings-body">
-            <tr><td colspan="7" class="placeholder-text" style="text-align:center;">Đang tải đơn đặt vé...</td></tr>
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Mã Đơn Vé</th>
+                <th>Khách Hàng</th>
+                <th>Số Điện Thoại</th>
+                <th>Phim</th>
+                <th>Suất Chiếu</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody id="admin-all-bookings-body">
+              <tr><td colspan="7" class="placeholder-text" style="text-align:center;">Đang tải đơn đặt vé...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <!-- 4. QR Check-in Section -->
     <section id="sec-checkin" class="admin-section">
       <div class="checkin-card">
-        <h3 style="color:#fff;text-align:center;">Soát Vé Tại Cửa Rạp</h3>
+        <h3 style="color:var(--text-primary);text-align:center;"><i class="fa-solid fa-qrcode" style="color:var(--accent-red);margin-right:8px;"></i>Soát Vé Tại Cửa Rạp</h3>
         <p style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-top:4px;">
           Nhập mã đặt vé in trên vé điện tử hoặc quét mã QR từ thiết bị của khách
         </p>
 
         <form id="form-checkin">
           <div class="checkin-input-group">
-            <input type="text" id="input-checkin-code" required placeholder="Nhập mã vé (ví dụ: BK-2026-DUNE01)" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.85rem 1rem;border-radius:8px;font-family:monospace;font-size:1.1rem;">
-            <button type="submit" class="btn btn-primary" id="btn-checkin-submit">Kiểm Tra</button>
+            <input type="text" id="input-checkin-code" required placeholder="Nhập mã vé (ví dụ: BK-2026-DUNE01)" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-primary);padding:0.85rem 1rem;border-radius:8px;font-family:monospace;font-size:1.1rem;">
+            <button type="submit" class="btn btn-primary" id="btn-checkin-submit"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra</button>
           </div>
         </form>
 
@@ -283,9 +321,9 @@
     </section>
   </main>
 
-  <script src="../js/common.js?v=2026100102"></script>
-  <script src="../js/api.js?v=2026100102"></script>
-  <script src="../js/auth.js?v=2026100102"></script>
-  <script src="../js/admin.js?v=2026100102"></script>
+  <script src="../js/common.js?v=2.3"></script>
+  <script src="../js/api.js?v=2.3"></script>
+  <script src="../js/auth.js?v=2.3"></script>
+  <script src="../js/admin.js?v=2.3"></script>
 </body>
 </html>

@@ -4,71 +4,194 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng Nhập & Đăng Ký - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.3">
 </head>
-<body class="dark-theme auth-body">
-  <div class="auth-card">
-    <a href="index.html" class="logo" style="justify-content:center;margin-bottom:0.5rem;">Cine<span>Wave</span></a>
-    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.25rem;">Hệ thống đặt vé xem phim & sự kiện</p>
+<body class="dark-theme auth-page-body">
+  <div class="auth-wrapper">
+    <!-- Left Showcase Panel -->
+    <div class="auth-showcase">
+      <div class="showcase-content">
+        <a href="index.html" class="logo showcase-logo">
+          <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+          Cine<span>Wave</span>
+        </a>
 
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tab-btn-login">Đăng Nhập</button>
-      <button class="auth-tab" id="tab-btn-register">Đăng Ký</button>
+        <div class="showcase-badge">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Trải Nghiệm Điện Ảnh Đỉnh Cao
+        </div>
+
+        <h1 class="showcase-title">
+          Đặt Vé Nhanh Chóng,<br>
+          <span class="gradient-text">Chọn Ghế Chuẩn VIP</span>
+        </h1>
+
+        <p class="showcase-desc">
+          Hệ thống đặt vé xem phim và sự kiện thông minh. Tận hưởng công nghệ giữ ghế thời gian thực, thanh toán an toàn và vé điện tử QR Code quét tại cửa rạp.
+        </p>
+
+        <div class="showcase-features">
+          <div class="showcase-feature-item">
+            <span class="feature-icon bg-red"><i class="fa-solid fa-couch"></i></span>
+            <div>
+              <strong>Sơ Đồ Ghế Trực Quan</strong>
+              <span>Tùy chọn ghế Thường, VIP & Couple</span>
+            </div>
+          </div>
+          <div class="showcase-feature-item">
+            <span class="feature-icon bg-gold"><i class="fa-solid fa-stopwatch"></i></span>
+            <div>
+              <strong>Khóa Ghế 5 Phút</strong>
+              <span>Không sợ trùng ghế với người khác</span>
+            </div>
+          </div>
+          <div class="showcase-feature-item">
+            <span class="feature-icon bg-emerald"><i class="fa-solid fa-qrcode"></i></span>
+            <div>
+              <strong>Vé Điện Tử QR Code</strong>
+              <span>Vào rạp tức thì, không cần xếp hàng</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Movie Posters Mini Collage -->
+        <div class="showcase-posters-strip">
+          <div class="mini-poster" style="background-image: url('https://image.tmdb.org/t/p/w200/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg');" title="Dune: Hành Tinh Cát - Phần Hai"></div>
+          <div class="mini-poster" style="background-image: url('https://image.tmdb.org/t/p/w200/6dasJ58GGFcC62H9KuukAryltUp.jpg');" title="Exhuma: Quật Mộ Trùng Ma"></div>
+          <div class="mini-poster" style="background-image: url('https://image.tmdb.org/t/p/w200/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg');" title="Kung Fu Panda 4"></div>
+          <div class="mini-poster" style="background-image: url('https://image.tmdb.org/t/p/w200/tMefBSflR6PGQLv7WvFPpKLZkyk.jpg');" title="Godzilla x Kong: Đế Chế Mới"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Login Form -->
-    <form id="form-login" class="auth-form">
-      <div class="form-group">
-        <label for="login-username">Tài Khoản hoặc Email *</label>
-        <input type="text" id="login-username" required placeholder="admin hoặc user@example.com">
+    <!-- Right Form Console -->
+    <div class="auth-console">
+      <div class="console-top-bar">
+        <a href="index.html" class="btn-back-home" title="Quay lại trang chủ">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Trang Chủ</span>
+        </a>
+        <button class="theme-toggle-btn" id="auth-theme-btn" title="Chuyển đổi giao diện Sáng / Tối">
+          <i class="fa-solid fa-sun"></i>
+        </button>
       </div>
-      <div class="form-group">
-        <label for="login-password">Mật Khẩu *</label>
-        <input type="password" id="login-password" required placeholder="Nhập mật khẩu...">
-      </div>
-      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;" id="btn-login-submit">
-        Đăng Nhập
-      </button>
-      <p style="font-size:0.8rem;color:var(--text-muted);margin-top:1rem;text-align:center;">
-        Tài khoản test Admin: <code>admin</code> / <code>admin123</code>
-      </p>
-    </form>
 
-    <!-- Register Form -->
-    <form id="form-register" class="auth-form" style="display:none;">
-      <div class="form-group">
-        <label for="reg-name">Họ và Tên *</label>
-        <input type="text" id="reg-name" required placeholder="Nguyễn Văn A">
-      </div>
-      <div class="form-group">
-        <label for="reg-username">Tên Đăng Nhập (Username) *</label>
-        <input type="text" id="reg-username" required placeholder="nguyenvana">
-      </div>
-      <div class="form-group">
-        <label for="reg-email">Địa Chỉ Email *</label>
-        <input type="email" id="reg-email" required placeholder="vana@example.com">
-      </div>
-      <div class="form-group">
-        <label for="reg-phone">Số Điện Thoại</label>
-        <input type="tel" id="reg-phone" placeholder="0912345678">
-      </div>
-      <div class="form-group">
-        <label for="reg-password">Mật Khẩu *</label>
-        <input type="password" id="reg-password" required placeholder="Tối thiểu 6 ký tự">
-      </div>
-      <button type="submit" class="btn btn-primary btn-block" style="margin-top:1.5rem;" id="btn-reg-submit">
-        Tạo Tài Khoản Mới
-      </button>
-    </form>
+      <div class="console-card">
+        <div class="console-header">
+          <h2 id="auth-heading">Chào Mừng Trở Lại</h2>
+          <p id="auth-subheading">Đăng nhập tài khoản để đặt vé và quản lý lịch chiếu</p>
+        </div>
 
-    <div style="margin-top:1.5rem;">
-      <a href="index.html" style="font-size:0.85rem;color:var(--text-muted);text-decoration:none;">← Quay lại trang chủ</a>
+        <!-- Auth Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-btn-login">
+            <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập
+          </button>
+          <button class="auth-tab" id="tab-btn-register">
+            <i class="fa-solid fa-user-plus"></i> Đăng Ký
+          </button>
+        </div>
+
+        <!-- Quick Fill Demo Credentials -->
+        <div class="quick-credentials-box" id="quick-creds-container">
+          <span class="quick-creds-label">Tài khoản trải nghiệm nhanh:</span>
+          <div class="quick-creds-btns">
+            <button type="button" class="btn-quick-fill" data-user="admin" data-pass="admin123">
+              <i class="fa-solid fa-shield-halved" style="color:var(--accent-red);"></i> Admin Demo
+            </button>
+            <button type="button" class="btn-quick-fill" data-user="user" data-pass="user123">
+              <i class="fa-solid fa-user" style="color:var(--accent-blue);"></i> Khách Hàng Demo
+            </button>
+          </div>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login" class="auth-form">
+          <div class="form-group">
+            <label for="login-username">Tài Khoản hoặc Email *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input type="text" id="login-username" required placeholder="admin hoặc user@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="login-password">Mật Khẩu *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="login-password" required placeholder="Nhập mật khẩu...">
+              <button type="button" class="btn-pwd-toggle" id="toggle-login-pwd" title="Hiện/ẩn mật khẩu">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-login-submit" style="margin-top:1.5rem;">
+            <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Hệ Thống
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="form-register" class="auth-form" style="display:none;">
+          <div class="form-group">
+            <label for="reg-name">Họ và Tên *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-id-card input-icon"></i>
+              <input type="text" id="reg-name" required placeholder="Nguyễn Văn A">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-username">Tên Đăng Nhập (Username) *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-user-pen input-icon"></i>
+              <input type="text" id="reg-username" required placeholder="nguyenvana">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Địa Chỉ Email *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-envelope input-icon"></i>
+              <input type="email" id="reg-email" required placeholder="vana@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-phone">Số Điện Thoại</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-phone input-icon"></i>
+              <input type="tel" id="reg-phone" placeholder="0912345678">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Mật Khẩu *</label>
+            <div class="input-with-icon">
+              <i class="fa-solid fa-lock input-icon"></i>
+              <input type="password" id="reg-password" required placeholder="Tối thiểu 6 ký tự">
+              <button type="button" class="btn-pwd-toggle" id="toggle-reg-pwd" title="Hiện/ẩn mật khẩu">
+                <i class="fa-regular fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-reg-submit" style="margin-top:1.5rem;">
+            <i class="fa-solid fa-user-plus"></i> Tạo Tài Khoản Mới
+          </button>
+        </form>
+
+        <div class="auth-footer-security">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Xác thực mã hóa an toàn JWT &middot; Phân quyền người dùng RBAC</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/login.js"></script>
+  <script src="js/common.js?v=2.3"></script>
+  <script src="js/api.js?v=2.3"></script>
+  <script src="js/auth.js?v=2.3"></script>
+  <script src="js/login.js?v=2.3"></script>
 </body>
 </html>

@@ -4,22 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chọn Ghế - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/seat-map.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
+  <link rel="stylesheet" href="css/seat-map.css?v=2.2">
 </head>
 <body class="dark-theme">
   <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <a href="index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+        Cine<span>Wave</span>
+      </a>
       <div id="hold-timer-container" style="display:none;">
         <div class="timer-box">
-          <span>Thời gian giữ ghế:</span>
+          <span><i class="fa-solid fa-stopwatch" style="color:var(--accent-red);margin-right:4px;"></i> Thời gian giữ ghế:</span>
           <strong id="timer-display">05:00</strong>
         </div>
       </div>
       <div class="nav-auth">
-        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+        <a href="login.html" class="btn btn-outline" id="auth-btn"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</a>
       </div>
     </div>
   </header>
@@ -29,7 +33,7 @@
     <div class="seat-container">
       <div class="screen-box">
         <div class="screen-curve"></div>
-        <p class="screen-label">MÀN HÌNH CHIẾU</p>
+        <p class="screen-label"><i class="fa-solid fa-tv" style="margin-right:6px;"></i>MÀN HÌNH CHIẾU</p>
       </div>
 
       <div class="seat-matrix" id="seat-matrix">
@@ -49,7 +53,7 @@
 
     <!-- Booking Summary Sidebar -->
     <aside class="booking-summary-panel">
-      <h3>Thông Tin Đặt Vé</h3>
+      <h3><i class="fa-solid fa-receipt" style="color:var(--accent-red);margin-right:8px;"></i>Thông Tin Đặt Vé</h3>
       
       <div class="summary-detail" id="summary-detail">
         <div class="summary-row">
@@ -79,10 +83,10 @@
 
       <div class="summary-actions">
         <button id="btn-hold-proceed" class="btn btn-primary btn-block" disabled>
-          Giữ Ghế & Tiếp Tục
+          <i class="fa-solid fa-lock"></i> Giữ Ghế & Tiếp Tục
         </button>
         <button id="btn-release-seats" class="btn btn-outline btn-block" style="display:none;">
-          Hủy Giữ Ghế
+          <i class="fa-solid fa-rotate-left"></i> Hủy Giữ Ghế
         </button>
       </div>
     </aside>
@@ -94,9 +98,9 @@
     </div>
   </footer>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/seat-selection.js"></script>
+  <script src="js/common.js?v=2.2"></script>
+  <script src="js/api.js?v=2.2"></script>
+  <script src="js/auth.js?v=2.2"></script>
+  <script src="js/seat-selection.js?v=2.2"></script>
 </body>
 </html>

@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tra Cứu & Vé Của Tôi - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
   <style>
     .lookup-section {
       background-color: var(--bg-card);
@@ -31,33 +32,38 @@
   <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="logo">Cine<span>Wave</span></a>
+      <a href="index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+        Cine<span>Wave</span>
+      </a>
       <nav class="nav-links">
-        <a href="index.html">Trang Chủ</a>
-        <a href="my-bookings.html" class="active">Vé Của Tôi</a>
+        <a href="index.html"><i class="fa-solid fa-house"></i> Trang Chủ</a>
+        <a href="my-bookings.html" class="active"><i class="fa-solid fa-ticket"></i> Vé Của Tôi</a>
       </nav>
       <div class="nav-auth">
-        <a href="login.html" class="btn btn-outline" id="auth-btn">Đăng Nhập</a>
+        <a href="login.html" class="btn btn-outline" id="auth-btn"><i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập</a>
       </div>
     </div>
   </header>
 
   <main class="container">
     <div class="lookup-section">
-      <h2 style="font-size:1.4rem;color:#fff;">Tra Cứu Vé Bằng Mã Đặt Chỗ</h2>
+      <h2 style="font-size:1.4rem;color:var(--text-primary);">
+        <i class="fa-solid fa-ticket" style="color:var(--accent-red);margin-right:8px;"></i>Tra Cứu Vé Bằng Mã Đặt Chỗ
+      </h2>
       <p style="font-size:0.9rem;color:var(--text-secondary);margin-top:4px;">
         Nhập mã vé dạng <code>BK-...</code> in trên vé hoặc gửi về email của bạn.
       </p>
 
       <form id="lookup-form" class="lookup-input-group">
-        <input type="text" id="lookup-code" placeholder="Ví dụ: BK-2026-DUNE01" required style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:#fff;padding:0.75rem 1rem;border-radius:8px;">
-        <button type="submit" class="btn btn-primary">Tra Cứu</button>
+        <input type="text" id="lookup-code" placeholder="Ví dụ: BK-2026-DUNE01" required style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-primary);padding:0.75rem 1rem;border-radius:8px;">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Tra Cứu</button>
       </form>
     </div>
 
     <section>
-      <h3 style="margin-bottom:1.25rem;color:#fff;border-left:4px solid var(--accent-red);padding-left:10px;">
-        Lịch Sử Đặt Vé Gần Đây
+      <h3 style="margin-bottom:1.25rem;color:var(--text-primary);border-left:4px solid var(--accent-red);padding-left:10px;">
+        <i class="fa-solid fa-clock-rotate-left" style="color:var(--accent-red);margin-right:8px;"></i>Lịch Sử Đặt Vé Gần Đây
       </h3>
       <div class="booking-history-grid" id="history-grid">
         <p class="placeholder-text">Chưa có mã vé lưu trên trình duyệt này.</p>
@@ -71,9 +77,9 @@
     </div>
   </footer>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/my-bookings.js"></script>
+  <script src="js/common.js?v=2.2"></script>
+  <script src="js/api.js?v=2.2"></script>
+  <script src="js/auth.js?v=2.2"></script>
+  <script src="js/my-bookings.js?v=2.2"></script>
 </body>
 </html>

@@ -68,20 +68,23 @@ function renderMoviesList(searchTerm = '') {
     const badgeClass = isNow ? 'success' : 'blue';
     const defaultPoster = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600';
 
+    const ratingVal = movie.rating || (8.6 + ((movie.id * 7) % 12) * 0.1).toFixed(1);
+
     return `
       <div class="movie-card">
         <div class="card-poster">
           <span class="badge ${badgeClass} card-badge">${badgeText}</span>
-          <span class="card-duration">${movie.duration_minutes} phút</span>
+          <span class="card-rating"><i class="fa-solid fa-star"></i> ${ratingVal}</span>
+          <span class="card-duration"><i class="fa-regular fa-clock"></i> ${movie.duration_minutes} phút</span>
           <img src="${movie.poster_url || defaultPoster}" alt="${movie.title}" onerror="this.src='${defaultPoster}'">
         </div>
         <div class="card-content">
-          <div class="card-category">${movie.category_name || 'Phim'}</div>
+          <div class="card-category"><i class="fa-solid fa-film" style="font-size:0.75rem;margin-right:3px;"></i> ${movie.category_name || 'Phim Điện Ảnh'}</div>
           <h3 class="card-title">${movie.title}</h3>
-          <p class="card-desc">${movie.description || 'Chưa có mô tả chi tiết.'}</p>
+          <p class="card-desc">${movie.description || 'Chưa có mô tả chi tiết cho tác phẩm này.'}</p>
           <div class="card-actions">
             <a href="movie-detail.html?id=${movie.id}" class="btn btn-primary btn-block">
-              ${isNow ? 'Đặt Vé Ngay' : 'Xem Chi Tiết'}
+              ${isNow ? '<i class="fa-solid fa-ticket"></i> Đặt Vé Ngay' : '<i class="fa-solid fa-circle-info"></i> Xem Chi Tiết'}
             </a>
           </div>
         </div>

@@ -35,9 +35,9 @@ async function loadMovieDetail(id) {
           <h1>${movie.title}</h1>
           
           <div class="detail-meta-list">
-            <div class="meta-item">Thể loại: <strong>${movie.category_name || 'Phim'}</strong></div>
-            <div class="meta-item">Thời lượng: <strong>${movie.duration_minutes} phút</strong></div>
-            <div class="meta-item">Khởi chiếu: <strong>${formatDate(movie.release_date)}</strong></div>
+            <div class="meta-item"><i class="fa-solid fa-tags" style="color:var(--accent-red);margin-right:6px;"></i>Thể loại: <strong>${movie.category_name || 'Phim'}</strong></div>
+            <div class="meta-item"><i class="fa-regular fa-clock" style="color:var(--accent-red);margin-right:6px;"></i>Thời lượng: <strong>${movie.duration_minutes} phút</strong></div>
+            <div class="meta-item"><i class="fa-regular fa-calendar-days" style="color:var(--accent-red);margin-right:6px;"></i>Khởi chiếu: <strong>${formatDate(movie.release_date)}</strong></div>
           </div>
 
           <div class="detail-desc">
@@ -46,7 +46,7 @@ async function loadMovieDetail(id) {
 
           ${movie.trailer_url ? `
             <a href="${movie.trailer_url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-              ▶ Xem Trailer Chính Thức
+              <i class="fa-solid fa-play"></i> Xem Trailer Chính Thức
             </a>
           ` : ''}
         </div>
@@ -80,7 +80,7 @@ async function loadMovieDetail(id) {
         <div class="cinema-group">
           <div class="cinema-header">
             <div>
-              <div class="cinema-title">${cinemaName}</div>
+              <div class="cinema-title"><i class="fa-solid fa-location-dot" style="color:var(--accent-red);margin-right:6px;"></i>${cinemaName}</div>
               <div class="cinema-address">${data.address} - ${data.city}</div>
             </div>
           </div>

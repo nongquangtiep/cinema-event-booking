@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vé Điện Tử - CineWave</title>
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/main.css?v=2.2">
   <style>
     @media print {
       .navbar, .ticket-actions, .footer { display: none !important; }
@@ -18,16 +19,21 @@
   <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="index.html" class="logo">Cine<span>Wave</span></a>
-      <a href="index.html" class="btn btn-outline">Về Trang Chủ</a>
+      <a href="index.html" class="logo">
+        <span class="logo-badge"><i class="fa-solid fa-film"></i></span>
+        Cine<span>Wave</span>
+      </a>
+      <a href="index.html" class="btn btn-outline"><i class="fa-solid fa-house"></i> Về Trang Chủ</a>
     </div>
   </header>
 
   <main class="container ticket-view-container">
     <div class="ticket-card" id="ticket-card">
       <div class="ticket-header">
-        <span class="badge success">Đã Thanh Toán Thành Công</span>
-        <h2 style="margin-top:0.75rem;font-size:1.5rem;color:#fff;">VÉ XEM PHIM ĐIỆN TỬ</h2>
+        <span class="badge success"><i class="fa-solid fa-circle-check"></i> Đã Thanh Toán Thành Công</span>
+        <h2 style="margin-top:0.75rem;font-size:1.5rem;color:var(--text-primary);">
+          <i class="fa-solid fa-ticket" style="color:var(--accent-red);margin-right:8px;"></i>VÉ XEM PHIM ĐIỆN TỬ
+        </h2>
         <div class="ticket-code" id="ticket-code">Mã: Đang tải...</div>
       </div>
 
@@ -38,12 +44,16 @@
       <!-- QR Code Box -->
       <div class="ticket-qr" id="ticket-qr-container">
         <img id="qr-image" src="" alt="Mã QR Soát Vé" style="display:none;">
-        <p>Quét mã QR tại cửa rạp để vào xem phim</p>
+        <p><i class="fa-solid fa-qrcode" style="margin-right:5px;"></i>Quét mã QR tại cửa rạp để vào xem phim</p>
       </div>
 
       <div class="ticket-actions">
-        <button class="btn btn-primary" onclick="window.print()" style="flex:1;">In Vé / Lưu PDF</button>
-        <a href="index.html" class="btn btn-outline" style="flex:1;">Đặt Thêm Vé</a>
+        <button class="btn btn-primary" onclick="window.print()" style="flex:1;">
+          <i class="fa-solid fa-print"></i> In Vé / Lưu PDF
+        </button>
+        <a href="index.html" class="btn btn-outline" style="flex:1;">
+          <i class="fa-solid fa-plus"></i> Đặt Thêm Vé
+        </a>
       </div>
     </div>
   </main>
@@ -54,8 +64,8 @@
     </div>
   </footer>
 
-  <script src="js/common.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/ticket.js"></script>
+  <script src="js/common.js?v=2.2"></script>
+  <script src="js/api.js?v=2.2"></script>
+  <script src="js/ticket.js?v=2.2"></script>
 </body>
 </html>
