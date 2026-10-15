@@ -26,9 +26,10 @@
 - [CHƯƠNG 2: TRIỂN KHAI ỨNG DỤNG WEB, CƠ SỞ DỮ LIỆU VÀ REVERSE PROXY](#chương-2-triển-khai-ứng-dụng-web-cơ-sở-dữ-liệu-và-reverse-proxy)
   - [2.1 Triển khai Web & DB (Bước 1 & Bước 2)](#21-triển-khai-web--db-bước-1--bước-2)
   - [2.2 Cấu hình Nginx làm Reverse Proxy và Bảo mật cơ bản (Bước 3 - Commit 1)](#22-cấu-hình-nginx-làm-reverse-proxy-và-bảo-mật-cơ-bản-bước-3---commit-1)
+  - [2.3 Nâng cấp Giao diện Doanh nghiệp & Cinematic Design System](#23-nâng-cấp-giao-diện-doanh-nghiệp--cinematic-design-system)
 - [CHƯƠNG 3: GIÁM SÁT HỆ THỐNG VỚI PROMETHEUS, GRAFANA VÀ LOKI](#chương-3-giám-sát-hệ-thống-với-prometheus-grafana-và-loki)
-  - [3.1 Tích hợp Prometheus + Grafana (Bước 4 - Commit 2)](#31-tích-hợp-prometheus--grafana-bước-4---commit-2)
-  - [3.2 Triển khai hệ thống Log tập trung Loki + Promtail (Bước 5 - Commit 3)](#32-triển-khai-hệ-thống-log-tập-trung-loki--promtail-bước-5---commit-3)
+  - [3.1 Tích hợp Prometheus + Grafana & Tối ưu hóa cAdvisor (Bước 4 - Commit 2)](#31-tích-hợp-prometheus--grafana--tối-ưu-hóa-cadvisor-bước-4---commit-2)
+  - [3.2 Triển khai hệ thống Log tập trung Loki + Promtail & Tra cứu LogQL (Bước 5 - Commit 3)](#32-triển-khai-hệ-thống-log-tập-trung-loki--promtail--tra-cứu-logql-bước-5---commit-3)
 - [CHƯƠNG 4: CÁC BIỆN PHÁP HARDENING VÀ ĐÁNH GIÁ BẢO MẬT](#chương-4-các-biện-pháp-hardening-và-đánh-giá-bảo-mật)
   - [4.1 Biện pháp Hardening (Bước 6)](#41-biện-pháp-hardening-bước-6)
   - [4.2 Đánh giá và kiểm thử bảo mật, hiệu năng hệ thống](#42-đánh-giá-và-kiểm-thử-bảo-mật-hiệu-năng-hệ-thống)
@@ -56,9 +57,9 @@ Hệ thống được thiết kế theo mô hình kiến trúc microservices con
                                         │
                                         ▼ HTTP :80 (Redirect 301) / HTTPS :443
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                     NGINX REVERSE PROXY & GATEWAY (cinema_nginx)                        │
+│                     NGINX REVERSE PROXY & GATEWAY (cinema-nginx)                        │
 │  - Cổng tiếp nhận duy nhất (Single Ingress Gateway): 0.0.0.0:80 & 0.0.0.0:443           │
-│  - Phục vụ Static Frontend: HTML5, CSS3, Vanilla JS (Bộ đệm Cache 7 ngày)               │
+│  - Phục vụ Static Frontend: HTML5, CSS3, Vanilla JS (Cache-busting, Revalidation)       │
 │  - SSL/TLS Termination: Chứng chỉ OpenSSL tự ký 2048-bit (TLSv1.2, TLSv1.3)             │
 │  - Rate Limiting: 10 req/s, Burst 20 (chống DoS / Brute-force trả mã HTTP 429)          │
 │  - Security Headers: X-Frame-Options, X-Content-Type-Options, X-XSS-Protection, CSP     │
@@ -66,7 +67,7 @@ Hệ thống được thiết kế theo mô hình kiến trúc microservices con
                                             │ proxy_pass /api/* (Mạng frontend-net: 5000)
                                             ▼
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                    ỨNG DỤNG WEB BACKEND API (cinema_web_app)                            │
+│                    ỨNG DỤNG WEB BACKEND API (cinema-app)                                │
 │  - Container: Node.js 20 Alpine, Chạy dưới non-root user: USER node (uid=1000)          │
 │  - RESTful APIs: Xác thực Stateless JWT, Phân quyền RBAC (User / Admin)                 │
 │  - Nghiệp vụ Đặt vé: Sơ đồ ghế ma trận thời gian thực, Khóa ghế tạm thời (TTL 300s)     │
@@ -76,11 +77,11 @@ Hệ thống được thiết kế theo mô hình kiến trúc microservices con
                                             │ TCP 3306 (Mạng nội bộ backend-net)
                                             ▼
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                         CƠ SỞ DỮ LIỆU MYSQL 8.0 (cinema_mysql)                          │
+│                         CƠ SỞ DỮ LIỆU MYSQL 8.0 (cinema-mysql)                          │
 │  - Động cơ lưu trữ InnoDB, 10 Bảng quan hệ chuẩn hóa 3NF, Bảng mã utf8mb4               │
 │  - Ràng buộc khóa cứng vật lý: UNIQUE KEY (showtime_id, seat_id)                        │
 │  - Khóa dòng cấp độ giao dịch: SELECT ... FOR UPDATE                                    │
-│  - Quản trị trực quan qua phpMyAdmin (cinema_phpmyadmin, Cổng Host ánh xạ: 8888:80)     │
+│  - Quản trị trực quan qua phpMyAdmin (cinema-phpmyadmin, Cổng Host ánh xạ: 8081:80)     │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
@@ -90,7 +91,7 @@ Hệ thống được thiết kế theo mô hình kiến trúc microservices con
 │  ├── Prometheus (:9090)    : Máy chủ Time-Series DB, cào metrics định kỳ 10 giây        │
 │  ├── Promtail (:9080)      : Đọc Docker Socket & Nginx JSON Access Logs, đẩy về Loki    │
 │  ├── Grafana Loki (:3100)  : Hệ thống lưu trữ và đánh chỉ mục Log tập trung             │
-│  └── Grafana (:3000)       : Trực quan hóa Dashboards quản trị và tra cứu LogQL         │
+│  └── Grafana (:3000)       : Trực quan hóa 4 Dashboards quản trị và tra cứu LogQL       │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -105,30 +106,30 @@ Hệ thống được thiết kế theo mô hình kiến trúc microservices con
 #### 3. Phân tách mạng nội bộ ảo Docker (Network Isolation)
 Hệ thống sử dụng 3 mạng bridge cô lập độc lập tuân thủ nghiêm ngặt nguyên tắc đặc quyền tối thiểu (*Principle of Least Privilege*):
 
-1. **`frontend-net`:** Kết nối giữa `cinema_nginx` và `cinema_web_app`. Cổng 5000 của Web App không ánh xạ ra ngoài host, chỉ Nginx mới có quyền chuyển tiếp request vào.
-2. **`backend-net`:** Kết nối giữa `cinema_web_app`, `cinema_mysql` và `cinema_phpmyadmin`. Cổng 3306 của CSDL bị đóng hoàn toàn với máy chủ host, loại bỏ nguy cơ quét cổng hoặc tấn công trực tiếp từ bên ngoài.
+1. **`frontend-net`:** Kết nối giữa `cinema-nginx` và `cinema-app`. Cổng 5000 của Web App không ánh xạ ra ngoài host, chỉ Nginx mới có quyền chuyển tiếp request vào.
+2. **`backend-net`:** Kết nối giữa `cinema-app`, `cinema-mysql` và `cinema-phpmyadmin`. Cổng 3306 của CSDL bị đóng hoàn toàn với máy chủ host, loại bỏ nguy cơ quét cổng hoặc tấn công trực tiếp từ bên ngoài.
 3. **`monitoring-net`:** Kết nối toàn bộ stack giám sát (Nginx, App, Prometheus, Grafana, Loki, Promtail, Node Exporter, cAdvisor) để phục vụ thu thập dữ liệu phân tích độc lập mà không ảnh hưởng tới luồng xử lý của khách hàng.
 
 #### 4. Bảng thông số kỹ thuật 10 Docker Containers hoạt động
 
 | STT | Service Name | Tên Container | Docker Image | Cổng Host (Ánh xạ) | Cổng Nội Bộ (Bridge) | Vai Trò & Chức Năng Chính |
 | :---: | :--- | :--- | :--- | :---: | :---: | :--- |
-| 1 | `nginx` | `cinema_nginx` | `nginx:alpine` (Custom) | **80, 443** | 80, 443 | Ingress Gateway, SSL Termination, Reverse Proxy, Static Server |
-| 2 | `app` | `cinema_web_app` | `node:20-alpine` (Custom) | *Đóng* | 5000 | Backend RESTful API, giữ ghế TTL 5 phút, xử lý nghiệp vụ đặt vé |
-| 3 | `mysql` | `cinema_mysql` | `mysql:8.0` | *Đóng* | 3306 | CSDL quan hệ InnoDB, bảo đảm tính ACID và khóa duy nhất |
-| 4 | `phpmyadmin` | `cinema_phpmyadmin` | `phpmyadmin:latest` | **8888** | 80 | Giao diện đồ họa Web quản trị CSDL MySQL |
-| 5 | `prometheus` | `cinema_prometheus` | `prom/prometheus:v2.50.0` | **9090** | 9090 | Thu thập metrics định kỳ (10s scrape interval) |
-| 6 | `grafana` | `cinema_grafana` | `grafana/grafana:10.3.0` | **3000** | 3000 | Trực quan hóa Dashboards quản trị và tra cứu LogQL |
-| 7 | `loki` | `cinema_loki` | `grafana/loki:2.9.4` | **3100** | 3100 | Kho lưu trữ và lập chỉ mục Logs tập trung |
-| 8 | `promtail` | `cinema_promtail` | `grafana/promtail:2.9.4` | *Đóng* | 9080 | Agent thu gom logs Docker container đẩy về Loki |
-| 9 | `node-exporter` | `cinema_node_exporter` | `prom/node-exporter:v1.7.0` | *Đóng* | 9100 | Thu thập metrics phần cứng máy chủ host (CPU, RAM, Disk) |
-| 10 | `cadvisor` | `cinema_cadvisor` | `gcr.io/cadvisor:v0.47.2` | *Đóng* | 8080 | Đo lường mức sử dụng tài nguyên của từng container |
+| 1 | `nginx` | `cinema-nginx` | `nginx:alpine` (Custom) | **80, 443** | 80, 443 | Ingress Gateway, SSL Termination, Reverse Proxy, Static Server |
+| 2 | `app` | `cinema-app` | `node:20-alpine` (Custom) | *Đóng* | 5000 | Backend RESTful API, giữ ghế TTL 5 phút, xử lý nghiệp vụ đặt vé |
+| 3 | `mysql` | `cinema-mysql` | `mysql:8.0` | *Đóng* | 3306 | CSDL quan hệ InnoDB, bảo đảm tính ACID và khóa duy nhất |
+| 4 | `phpmyadmin` | `cinema-phpmyadmin` | `phpmyadmin/phpmyadmin:latest` | **8081** | 80 | Giao diện đồ họa Web quản trị CSDL MySQL |
+| 5 | `prometheus` | `cinema-prometheus` | `prom/prometheus:v2.50.0` | **9090** | 9090 | Thu thập metrics định kỳ (10s scrape interval) |
+| 6 | `grafana` | `cinema-grafana` | `grafana/grafana:10.3.0` | **3000** | 3000 | Trực quan hóa Dashboards quản trị và tra cứu LogQL |
+| 7 | `loki` | `cinema-loki` | `grafana/loki:2.9.4` | **3100** | 3100 | Kho lưu trữ và lập chỉ mục Logs tập trung |
+| 8 | `promtail` | `cinema-promtail` | `grafana/promtail:2.9.4` | *Đóng* | 9080 | Agent thu gom logs Docker container đẩy về Loki |
+| 9 | `node-exporter` | `cinema-node-exporter` | `prom/node-exporter:v1.7.0` | *Đóng* | 9100 | Thu thập metrics phần cứng máy chủ host (CPU, RAM, Disk) |
+| 10 | `cadvisor` | `cinema-cadvisor` | `gcr.io/cadvisor/cadvisor:latest` | *Đóng* | 8080 | Đo lường mức sử dụng tài nguyên của từng container (v0.55.1) |
 
 ---
 
 ### 1.2 Yêu cầu quản lý mã nguồn trên GitHub
 
-Toàn bộ mã nguồn ứng dụng, các file cấu hình (`docker-compose.yml`, `nginx.conf`, `prometheus.yml`, `loki-config.yaml`...) được quản lý chặt chẽ trên GitHub theo đúng mã số sinh viên:
+Toàn bộ mã nguồn ứng dụng, các file cấu hình (`docker-compose.yml`, `nginx.conf`, `prometheus.yml`, `loki-config.yaml`...) được quản lý chặt chẽ trên GitHub theo đúng quy chuẩn:
 
 - **Repository GitHub được tổ chức với các commit rõ ràng theo đúng tiến độ triển khai 6 bước:**
   - *Bước 1 & Bước 2:* Khởi tạo cấu trúc dự án chuẩn, xây dựng ứng dụng Web Frontend/Backend và Cơ sở dữ liệu MySQL 8.0, phpMyAdmin (`commit 2d400e2`, `4dccc44`, `d0b9d54`, `0cb69cf`).
@@ -136,6 +137,7 @@ Toàn bộ mã nguồn ứng dụng, các file cấu hình (`docker-compose.yml`
   - *Bước 4 (Commit 2):* Tích hợp hệ sinh thái giám sát Metrics thời gian thực với Prometheus, Grafana, Node Exporter và cAdvisor (`commit 2cd8dd2`).
   - *Bước 5 (Commit 3):* Triển khai hệ thống quản lý nhật ký tập trung Loki và Promtail, thiết lập thu thập log từ Docker Socket và kiểm thử các câu truy vấn LogQL tiêu chuẩn (`commit 2cd8dd2`).
   - *Bước 6:* Gia cố an toàn thông tin (Hardening) gồm Non-root user, Network Isolation, bảo vệ biến môi trường `.env`, tường lửa iptables/UFW, và thực thi kiểm thử toàn diện E2E (`commit 6de30f3`, `e4db13c`).
+  - *Nâng cấp Enterprise:* Cải tiến toàn diện Giao diện Doanh nghiệp (Enterprise UI/UX), Cinematic Design System, tích hợp bộ icon quốc tế Font Awesome 6.5.1, chức năng chuyển đổi giao diện Sáng/Tối (Dark/Light Theme Toggle), Nginx Cache-Busting, và nâng cấp cAdvisor v0.55.1 hỗ trợ containerd snapshotter (`commit d707c94`).
 - **File README.md được biên soạn chi tiết:** Hướng dẫn cụ thể cách thức clone repository, cấu hình biến môi trường (`.env` từ `.env.example`) và chạy lệnh `docker compose up -d` để khởi chạy toàn bộ hệ thống.
 
 ---
@@ -233,13 +235,13 @@ services:
           cpus: '1.0'
           memory: 512M
 
-  # 3. Quản trị trực quan phpMyAdmin (Ánh xạ cổng 8888 ra Host)
+  # 3. Quản trị trực quan phpMyAdmin (Ánh xạ cổng 8081 ra Host)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
-    container_name: cinema_phpmyadmin
+    container_name: cinema-phpmyadmin
     restart: unless-stopped
     ports:
-      - "8888:80"  # Cổng truy cập từ Host: http://192.168.5.128:8888
+      - "8081:80"  # Cổng truy cập từ Host: http://192.168.5.128:8081
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -326,7 +328,7 @@ server {
     location /api/ {
         limit_req zone=api_limit burst=20 nodelay;
 
-        proxy_pass http://cinema_web_app:5000;
+        proxy_pass http://cinema-app:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -347,9 +349,46 @@ server {
 
 ---
 
+### 2.3 Nâng cấp Giao diện Doanh nghiệp & Cinematic Design System
+
+Để đáp ứng tiêu chuẩn phần mềm Web Enterprise hiện đại và nâng cao trải nghiệm người dùng (UX/UI), giao diện hệ thống đã được tái cấu trúc toàn diện theo ngôn ngữ thiết kế **Cinematic Design System**:
+
+#### 1. Hệ thống Icon Quốc tế Font Awesome 6.5.1
+- Toàn bộ các icon đồ họa cũ được chuẩn hóa bằng bộ thư viện chuẩn công nghiệp **Font Awesome 6.5.1 (Free / Classic)**:
+  - Nhận diện thương hiệu & Điện ảnh: `<i class="fa-solid fa-film"></i>`, `<i class="fa-solid fa-clapperboard"></i>`.
+  - Nghiệp vụ đặt vé: `<i class="fa-solid fa-ticket"></i>`, `<i class="fa-solid fa-couch"></i>`, `<i class="fa-solid fa-credit-card"></i>`.
+  - Định danh người dùng & Ký số: `<i class="fa-solid fa-circle-user"></i>`, `<i class="fa-solid fa-signature"></i>`, `<i class="fa-solid fa-file-signature"></i>`.
+  - Bảo mật & Quản trị: `<i class="fa-solid fa-shield-halved"></i>`, `<i class="fa-solid fa-chart-line"></i>`, `<i class="fa-solid fa-qrcode"></i>`.
+
+#### 2. Tính năng Chuyển đổi Giao diện Sáng / Tối (Dark / Light Theme Toggle)
+- Nút chuyển đổi giao diện thời gian thực với icon **Mặt trời** (`fa-solid fa-sun`) và **Mặt trăng** (`fa-solid fa-moon`).
+- Toàn bộ màu sắc được định nghĩa thông qua hệ thống **CSS Custom Properties (Variables)**: `--bg-body`, `--text-main`, `--card-bg`, `--border-color`, `--navbar-bg`.
+- Trạng thái giao diện được tự động lưu trữ vào `localStorage` của trình duyệt, áp dụng đồng bộ trên **100% tất cả các trang** (Trang chủ, Chi tiết phim, Chọn ghế, Thanh toán, Vé của tôi, Cổng đăng nhập/đăng ký, và Bảng điều khiển Quản trị viên).
+
+#### 3. Thanh Điều Hướng (Navbar) Chuyên Nghiệp Chống Vỡ Dòng
+- Cố định trên đỉnh trang (`sticky top-0`), thiết lập `flex-wrap: nowrap` và `overflow-x: auto` nhằm đảm bảo thanh điều hướng không bao giờ bị tràn, co rúm hay rớt dòng trên mọi kích thước màn hình.
+- Logo CineWave dạng huy hiệu điện ảnh (cinema badge) phát sáng chuyển sắc cao cấp.
+- Capsule định danh tài khoản hiển thị ảnh đại diện viết tắt, tên đăng nhập, vai trò (Admin / Customer) và số dư ví tiền điện tử thời gian thực.
+
+#### 4. Cổng Đăng Nhập / Đăng Ký (Auth Portal) Split-Screen Cao Cấp
+- Bố cục 2 cột (Split-Screen): Cột trái trình diễn hình ảnh điện ảnh CineWave cao cấp, cột phải là form xác thực người dùng với hiệu ứng phát sáng viền khi focus (`box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.25)`).
+- **1-Click Demo Quick Fill:** Tích hợp sẵn 2 nút điền nhanh tài khoản mẫu (Tài khoản Quản trị viên `admin / password123` và Khách hàng `customer / password123`) giúp quá trình demo nghiệm thu diễn ra tức thì.
+- Nút bật/tắt ẩn hiện mật khẩu với icon mắt (`fa-solid fa-eye` / `fa-solid fa-eye-slash`).
+
+#### 5. Bảng Quản Trị Admin Portal Hiện Đại
+- Thanh Sidebar cố định với hiệu ứng hover và chỉ báo trang đang hoạt động rõ ràng.
+- Hệ thống Thẻ thống kê KPI (Doanh thu lũy kế, Vé đã bán, Suất chiếu hoạt động) phát sáng viền với hiệu ứng kính mờ (Glassmorphism).
+- Bảng dữ liệu quản trị (Phim, Suất chiếu, Vé) tích hợp thanh tìm kiếm tức thời và bộ lọc trạng thái.
+
+#### 6. Cơ chế Nginx Cache-Busting Chống Lưu Cache Lỗi Thời
+- Thiết lập header `Cache-Control: no-cache, must-revalidate` đối với các tài nguyên HTML/CSS/JS.
+- Gắn tham số phiên bản `?v=2.0.0` tại các liên kết mã nguồn trên HTML nhằm đảm bảo người dùng luôn nhận được giao diện mới nhất ngay sau khi cập nhật hệ thống.
+
+---
+
 ## CHƯƠNG 3: GIÁM SÁT HỆ THỐNG VỚI PROMETHEUS, GRAFANA VÀ LOKI
 
-### 3.1 Tích hợp Prometheus + Grafana (Bước 4 - Commit 2)
+### 3.1 Tích hợp Prometheus + Grafana & Tối ưu hóa cAdvisor (Bước 4 - Commit 2)
 
 Để đảm bảo khả năng quan sát (observability) trạng thái hoạt động của hệ thống, Prometheus được cấu hình thu thập các thông số kỹ thuật (CPU usage, Memory utilization, Network I/O) từ các container và web server. Giao diện Grafana kết nối trực tiếp với nguồn dữ liệu Prometheus để hiển thị trực quan thông qua các biểu đồ thời gian thực.
 
@@ -357,7 +396,7 @@ server {
 Prometheus định kỳ cào số liệu mỗi `10s` một lần từ 4 mục tiêu then chốt:
 1. `node-exporter:9100`: Giám sát tải phần cứng máy chủ Ubuntu host (tỷ lệ tải CPU, bộ nhớ RAM khả dụng, Disk I/O, Network Throughput).
 2. `cadvisor:8080`: Thu thập số liệu chi tiết của 10 Docker containers đang chạy (CPU limits, RAM working set, Network transmit/receive).
-3. `cinema_web_app:5000/metrics`: Thu thập thông số hiệu năng ứng dụng (RED Metrics: Request Rate, Error Rate, Duration Latency) và các chỉ số kinh doanh CineWave.
+3. `app:5000/metrics`: Thu thập thông số hiệu năng ứng dụng (RED Metrics: Request Rate, Error Rate, Duration Latency) và các chỉ số kinh doanh CineWave.
 4. `localhost:9090`: Tự giám sát trạng thái nội tại của máy chủ Prometheus.
 
 ```yaml
@@ -386,45 +425,68 @@ scrape_configs:
   - job_name: 'app'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ['cinema_web_app:5000']
+      - targets: ['app:5000']
 ```
 
-#### 2. Trực quan hóa Bảng điều khiển Grafana (4 Provisioned Dashboards)
+#### 2. Kiến trúc cAdvisor v0.55.1 & Khắc phục tương thích Containerd Snapshotter
+Khi triển khai trên các hệ điều hành Ubuntu mới (như Ubuntu 24.04/26.04) với Docker Engine 29+ sử dụng cơ chế lưu trữ **`overlayfs` (`driver-type: io.containerd.snapshotter.v1`)**, các bản cAdvisor cũ (v0.47.2) gặp lỗi:
+```text
+Failed to create existing container: ... failed to identify the read-write layer ID ... mount-id: no such file or directory
+```
+Nguyên nhân do cAdvisor cũ cố gắng tìm kiếm tệp siêu dữ liệu `layerdb` truyền thống không còn tồn tại trên cơ chế snapshotter mới, dẫn đến không thu thập được metric của các container. 
+
+**Giải pháp kỹ thuật tối ưu hóa toàn diện đã áp dụng:**
+1. **Nâng cấp cAdvisor Image:** Sử dụng bản `gcr.io/cadvisor/cadvisor:latest` (v0.55.1) đã tích hợp bản vá chính thức cho containerd snapshotters.
+2. **Mount Socket kép:** Gắn cả `/var/run/docker.sock` và `/run/containerd/containerd.sock` vào container cAdvisor.
+3. **Cờ tối ưu hiệu năng:**
+   - `--docker_only=true`: Chỉ quét tài nguyên của các Docker container, bỏ qua toàn bộ hàng trăm tiến trình hệ thống, Gnome desktop của máy chủ host.
+   - `--disable_metrics=percpu,process,sched,hugetlb,referenced_memory,resctrl`: Loại bỏ các nhóm metric tiêu tốn tài nguyên không cần thiết.
+   - `--housekeeping_interval=10s`: Đồng bộ chu kỳ thu thập dữ liệu với Prometheus.
+4. **Cấp phát tài nguyên phù hợp:** Nâng giới hạn RAM lên `512M` và CPU `0.5`, giảm thời gian phản hồi endpoint `/metrics` từ `>10.1s` (gây lỗi `context deadline exceeded` khiến state DOWN) xuống chỉ còn **~1.4s**, đảm bảo 100% target luôn trong trạng thái **UP (1/1 up)**.
+
+#### 3. Trực quan hóa Bảng điều khiển Grafana (4 Provisioned Dashboards)
 Grafana được thiết lập tự động nạp nguồn dữ liệu (Datasource Provisioning) và 4 Dashboards quản trị chuyên nghiệp:
 - **Dashboard 01 - Host Infrastructure (Ubuntu VM):** Giám sát thời gian thực % CPU sử dụng, RAM tiêu thụ, Băng thông mạng `eth0` và lưu lượng đọc/ghi đĩa.
-- **Dashboard 02 - Docker Containers (cAdvisor):** Đo lường mức sử dụng tài nguyên của từng container (`cinema_nginx`, `cinema_web_app`, `cinema_mysql`...).
+- **Dashboard 02 - Docker Containers (cAdvisor):** Đo lường mức sử dụng tài nguyên của cả 10 container (`cinema-nginx`, `cinema-app`, `cinema-mysql`, `cinema-grafana`...).
 - **Dashboard 03 - Application APM (RED Metrics):** Theo dõi tần suất request gửi đến từng endpoint (`rate(http_requests_total[1m])`), biểu đồ độ trễ phân vị P95/P99, và tỷ lệ mã phản hồi HTTP 2xx/4xx/5xx.
-- **Dashboard 04 - Cinema Business & Live Logs:** Thống kê Doanh thu lũy kế (VND), số vé đã bán thành công, số ghế đang trong trạng thái giữ tạm thời (TTL).
+- **Dashboard 04 - Cinema Business & Live Logs:** Thống kê Doanh thu lũy kế (VND), số vé đã bán thành công, số ghế đang trong trạng thái giữ tạm thời (TTL) và nhật ký log trực tiếp.
 
-#### 3. Các câu truy vấn PromQL tiêu biểu
+#### 4. Các câu truy vấn PromQL tiêu biểu
 
 | Chỉ Số Giám Sát | Câu Truy Vấn PromQL | Ý Nghĩa Kỹ Thuật |
 | :--- | :--- | :--- |
+| **Số Container Đang Chạy** | `count(count by (name) (container_cpu_usage_seconds_total{name=~"cinema-.*"}))` | Đếm số lượng container cinema đang hoạt động |
 | **CPU Máy Chủ Host (%)** | `100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100)` | Tỷ lệ sử dụng CPU tổng thể của Ubuntu VM |
-| **RAM Container App (MB)** | `container_memory_working_set_bytes{name="cinema_web_app"} / 1024 / 1024` | Bộ nhớ RAM làm việc thực tế của Backend |
+| **CPU Từng Container (%)** | `sum(rate(container_cpu_usage_seconds_total{name=~"cinema-.*"}[1m])) by (name) * 100` | % CPU tiêu thụ của từng container |
+| **RAM Container (MB)** | `sum(container_memory_usage_bytes{name=~"cinema-.*"}) by (name) / 1024 / 1024` | Bộ nhớ RAM thực tế đang dùng của từng container |
+| **Băng thông Container (KB/s)** | `sum(rate(container_network_receive_bytes_total{name=~"cinema-.*"}[1m])) by (name) / 1024` | Lưu lượng mạng nhận vào của từng container |
 | **Tần suất API (req/s)** | `sum(rate(http_requests_total[1m])) by (handler, status)` | Thông lượng request theo từng endpoint |
 
 ---
 
-### 3.2 Triển khai hệ thống Log tập trung Loki + Promtail (Bước 5 - Commit 3)
+### 3.2 Triển khai hệ thống Log tập trung Loki + Promtail & Tra cứu LogQL (Bước 5 - Commit 3)
 
-Hệ thống log tập trung được thiết lập bằng bộ đôi Loki và Promtail. Promtail thực hiện thu thập log từ tất cả các Docker container trên máy chủ và đẩy về Loki server. Các câu truy vấn LogQL tiêu biểu đã được thực hiện và kiểm chứng thành công:
+Hệ thống log tập trung được thiết lập bằng bộ đôi Loki và Promtail. Promtail thực hiện thu thập log từ tất cả các Docker container trên máy chủ và đẩy về Loki server. Kỹ trị viên có thể tra cứu nhanh thông qua giao diện **Grafana Explore** hoặc **Dashboard 04**:
 
-#### 1. Hai câu truy vấn LogQL tiêu chuẩn theo yêu cầu đề bài
-
-> [!TIP]
-> **• Truy vấn 1 (Lọc log lỗi HTTP 5xx từ Nginx access log):**
-> ```logql
-> {container_name="cinema_nginx"} |~ " (5[0-9]{2}) "
-> ```
-> *Kết quả kiểm chứng:* Khi giả lập tắt container backend, Nginx ghi nhận mã phản hồi `502 Bad Gateway`. Grafana hiển thị chính xác các bản ghi log lỗi kèm địa chỉ IP của client và mốc thời gian chi tiết.
+#### 1. Các câu truy vấn LogQL tiêu chuẩn theo yêu cầu đề bài
 
 > [!TIP]
-> **• Truy vấn 2 (Tìm kiếm các thông điệp lỗi hoặc ngoại lệ trong ứng dụng):**
+> **• Truy vấn 1 (Lọc log toàn bộ ứng dụng Backend Node.js / Express):**
 > ```logql
-> {container_name="cinema_web_app"} |~ "(?i)(error|exception|failed)"
+> {container_name="app"}
 > ```
-> *Kết quả kiểm chứng:* Bắt chính xác toàn bộ log mức `error` từ Winston Logger khi phát sinh ngoại lệ cơ sở dữ liệu hoặc lỗi logic, Promtail lập tức đẩy về Loki để kỹ trị tra cứu trong chưa đầy 1 giây.
+> *Kết quả kiểm chứng:* Trả về đầy đủ luồng nhật ký nghiệp vụ: khởi tạo kết nối DB, ghi nhận API request, kiểm tra khóa ghế TTL và xác thực người dùng.
+
+> [!TIP]
+> **• Truy vấn 2 (Tìm kiếm các thông điệp lỗi hoặc ngoại lệ trong hệ thống):**
+> ```logql
+> {job="docker"} |= "error"
+> ```
+> Hoặc tìm lỗi HTTP 5xx từ Nginx:
+> ```logql
+> {container_name="nginx"} |~ " (5[0-9]{2}) "
+> ```
+> *Kết quả kiểm chứng:* Bắt chính xác toàn bộ log mức `error` từ Winston Logger hoặc Nginx khi có sự cố, giúp định vị nguyên nhân gốc rễ (root cause) trong vài giây.
 
 #### 2. Cấu hình Promtail gom Log (`monitoring/promtail/promtail-config.yml`)
 
@@ -447,7 +509,7 @@ scrape_configs:
           - localhost
         labels:
           job: nginx
-          container_name: cinema_nginx
+          container_name: nginx
           __path__: /var/log/nginx/access_json.log
 
   # 2. Thu thập Docker Container Logs qua Docker Socket
@@ -457,20 +519,31 @@ scrape_configs:
         refresh_interval: 5s
     relabel_configs:
       - source_labels: ['__meta_docker_container_name']
-        regex: '/cinema.*'
+        regex: '/cinema-.*'
         action: keep
       - source_labels: ['__meta_docker_container_name']
         regex: '.*'
         target_label: 'job'
         replacement: 'docker'
       - source_labels: ['__meta_docker_container_name']
-        regex: '/(.*)'
+        regex: '/cinema-(.*)'
         target_label: 'container_name'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/(.*)'
+        target_label: 'container'
       - source_labels: ['__meta_docker_container_log_stream']
         target_label: 'stream'
     pipeline_stages:
       - docker: {}
 ```
+
+#### 3. Hướng dẫn Thao tác Tra cứu Log trên Grafana
+- **Cách 1: Dùng Grafana Explore (`http://192.168.5.128:3000/explore`):**
+  1. Chọn Datasource là **Loki**.
+  2. Bấm nút **`Label browser`** -> Chọn nhãn `container_name` -> Chọn container cần xem (ví dụ: `app`, `nginx`, `mysql`) -> Bấm **`Show logs`**.
+  3. Hoặc gõ trực tiếp biểu thức LogQL như `{container_name="app"}` vào khung tìm kiếm rồi bấm **`Run query`** (hoặc `Shift + Enter`).
+- **Cách 2: Dùng Dashboard dựng sẵn:**
+  - Truy cập trực tiếp Dashboard `04 - Cinema Business & Live Logs` tại địa chỉ: `http://192.168.5.128:3000/d/cinema-business-logs`.
 
 ---
 
@@ -483,11 +556,11 @@ Nhằm gia cố an toàn thông tin cho toàn bộ hạ tầng trước khi đư
 - **Chạy container dưới quyền non-root user:** Khai báo user trong Dockerfile hoặc docker-compose để giới hạn quyền hạn của tiến trình, ngăn chặn tuyệt đối việc kẻ tấn công leo thang đặc quyền (privilege escalation) lên máy chủ chủ (host). Khai báo chỉ thị `USER node` (uid=1000) trong `backend/Dockerfile`. Kẻ tấn công nếu có khai thác được lỗ hổng RCE cũng chỉ có quyền user hạn chế trong sandbox container, không thể can thiệp máy chủ host.
 - **Phân tách mạng nội bộ (Network Isolation):** Sử dụng các Docker bridge networks độc lập để cô lập tầng cơ sở dữ liệu khỏi truy cập trực tiếp từ mạng bên ngoài. Chỉ mở cổng 80/443 của Nginx ra Internet; CSDL 3306 và App 5000 hoàn toàn được cô lập nội bộ.
 - **Quản lý mật khẩu mạnh và biến môi trường:** Sử dụng tệp `.env` riêng biệt được bảo vệ quyền truy cập, tránh lộ thông tin mật khẩu cứng trong mã nguồn. Tệp `.env` được đưa vào `.gitignore`, mã nguồn chỉ lưu trữ file mẫu `.env.example`.
-- **Hoàn thiện Security Headers trên Nginx và cấu hình tường lửa iptables/UFW cơ bản:** Cấu hình đầy đủ Security Headers chuẩn OWASP và ẩn `server_tokens off;`. Thiết lập quy tắc chuỗi `DOCKER-USER` của iptables để chỉ cho phép địa chỉ IP quản trị (`192.168.5.1`) truy cập các cổng nội bộ (`3000`, `8888`, `9090`, `3100`):
+- **Hoàn thiện Security Headers trên Nginx và cấu hình tường lửa iptables/UFW cơ bản:** Cấu hình đầy đủ Security Headers chuẩn OWASP và ẩn `server_tokens off;`. Thiết lập quy tắc chuỗi `DOCKER-USER` của iptables để chỉ cho phép địa chỉ IP quản trị (`192.168.5.1`) truy cập các cổng nội bộ (`3000`, `8081`, `9090`, `3100`):
   ```bash
   # Chỉ cho phép địa chỉ IP máy trạm quản trị truy cập cổng quản trị
-  sudo iptables -I DOCKER-USER -i eth0 -p tcp -m multiport --dports 3000,8888,9090,3100 -s 192.168.5.1 -j ACCEPT
-  sudo iptables -A DOCKER-USER -i eth0 -p tcp -m multiport --dports 3000,8888,9090,3100 -j DROP
+  sudo iptables -I DOCKER-USER -i eth0 -p tcp -m multiport --dports 3000,8081,9090,3100 -s 192.168.5.1 -j ACCEPT
+  sudo iptables -A DOCKER-USER -i eth0 -p tcp -m multiport --dports 3000,8081,9090,3100 -j DROP
   ```
 
 #### Bảng tổng hợp các biện pháp Hardening toàn diện
@@ -544,7 +617,7 @@ Bộ kiểm thử tự động [test_e2e_flow.py](file:///home/nong-quang-tiep/c
 
 ![Hình 6: Chức năng soát vé tại rạp Check-in QR Code](images/ticket_checkin.png)
 
-![Hình 7: Giao diện quản trị CSDL phpMyAdmin tại cổng 8888](images/phpmyadmin_db.png)
+![Hình 7: Giao diện quản trị CSDL phpMyAdmin tại cổng 8081](images/phpmyadmin_db.png)
 
 ![Hình 8: Bảng điều khiển Grafana Dashboard giám sát RED Metrics và Tài nguyên Containers](images/grafana_dashboard.png)
 
@@ -571,7 +644,7 @@ Báo cáo đã trình bày toàn diện quy trình triển khai, cấu hình và
 ## PHỤ LỤC: HƯỚNG DẪN CÀI ĐẶT VÀ VẬN HÀNH
 
 ### 1. Yêu cầu môi trường
-- Hệ điều hành: Ubuntu 22.04 LTS hoặc 24.04 LTS (Máy chủ thật hoặc máy ảo VMware/VirtualBox, IP: `192.168.5.128`).
+- Hệ điều hành: Ubuntu 22.04 LTS hoặc 24.04/26.04 LTS (Máy chủ thật hoặc máy ảo VMware/VirtualBox, IP: `192.168.5.128`).
 - Phần mềm: Docker Engine >= 24.0, Docker Compose v2.
 - Tài nguyên phần cứng khuyến nghị: Tối thiểu 2 CPU Cores, 3GB RAM, 20GB dung lượng ổ đĩa.
 
@@ -600,8 +673,8 @@ python3 tests/test_security_race.py
 | Dịch Vụ | Giao Thức / URL Truy Cập | Cổng | Tài Khoản Đăng Nhập Mặc Định |
 | :--- | :--- | :---: | :--- |
 | **Website Đặt vé Khách hàng** | `https://192.168.5.128/` *(Tự động chuyển từ :80)* | 443 | Khách hàng đăng ký tài khoản trực tiếp |
-| **Bảng Quản trị Admin Portal** | `https://192.168.5.128/admin/` | 443 | Tài khoản có quyền Quản trị viên (`admin`) |
-| **Quản trị CSDL phpMyAdmin** | `http://192.168.5.128:8888/` | 8888 | `cinema_user` / `cinema_secret_password` |
+| **Bảng Quản trị Admin Portal** | `https://192.168.5.128/admin/` | 443 | `admin` / `password123` |
+| **Quản trị CSDL phpMyAdmin** | `http://192.168.5.128:8081/` | 8081 | `cinema_user` / `cinema_secret_password` |
 | **Bảng điều khiển Grafana** | `http://192.168.5.128:3000/` | 3000 | `admin` / `admin123` |
 | **Máy chủ Metrics Prometheus**| `http://192.168.5.128:9090/` | 9090 | Không yêu cầu xác thực |
 | **Máy chủ Logs Loki API** | `http://192.168.5.128:3100/` | 3100 | Không yêu cầu xác thực (Truy vấn qua Grafana) |
