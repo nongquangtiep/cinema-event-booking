@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bảng Điều Khiển Quản Trị - CineWave</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../css/main.css?v=2.3">
-  <link rel="stylesheet" href="../css/admin.css?v=2.3">
+  <link rel="stylesheet" href="../css/main.css?v=2.4">
+  <link rel="stylesheet" href="../css/admin.css?v=2.4">
 </head>
 <body class="dark-theme admin-layout">
   <!-- Sidebar -->
@@ -301,29 +301,179 @@
       </div>
     </section>
 
-    <!-- 4. QR Check-in Section -->
+    <!-- 4. QR Check-in Section (Enterprise Gate Terminal) -->
     <section id="sec-checkin" class="admin-section">
-      <div class="checkin-card">
-        <h3 style="color:var(--text-primary);text-align:center;"><i class="fa-solid fa-qrcode" style="color:var(--accent-red);margin-right:8px;"></i>Soát Vé Tại Cửa Rạp</h3>
-        <p style="text-align:center;font-size:0.9rem;color:var(--text-secondary);margin-top:4px;">
-          Nhập mã đặt vé in trên vé điện tử hoặc quét mã QR từ thiết bị của khách
-        </p>
-
-        <form id="form-checkin">
-          <div class="checkin-input-group">
-            <input type="text" id="input-checkin-code" required placeholder="Nhập mã vé (ví dụ: BK-2026-DUNE01)" style="flex:1;background:var(--bg-secondary);border:1px solid var(--border-color);color:var(--text-primary);padding:0.85rem 1rem;border-radius:8px;font-family:monospace;font-size:1.1rem;">
-            <button type="submit" class="btn btn-primary" id="btn-checkin-submit"><i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra</button>
+      <!-- 4.1 KPI Overview Cards for Check-in -->
+      <div class="stats-cards checkin-kpi-cards">
+        <div class="stat-card card-revenue">
+          <div class="stat-card-header">
+            <span class="stat-label">Cổng Kiểm Soát</span>
+            <span class="stat-icon-box bg-emerald"><i class="fa-solid fa-door-open"></i></span>
           </div>
-        </form>
+          <p class="stat-number text-emerald" style="font-size:1.5rem;letter-spacing:0.5px;">CỔNG 01 - ACTIVE</p>
+          <div class="stat-badge trend-up">
+            <span class="pulse-indicator" style="background:#10b981;"></span> Trực tuyến & Sẵn sàng quét vé
+          </div>
+          <div class="stat-footer-bar bar-emerald"></div>
+        </div>
 
-        <div id="checkin-result-box" class="checkin-result"></div>
+        <div class="stat-card card-tickets">
+          <div class="stat-card-header">
+            <span class="stat-label">Tổng Vé Trong Suất</span>
+            <span class="stat-icon-box bg-blue"><i class="fa-solid fa-ticket"></i></span>
+          </div>
+          <p class="stat-number text-blue" id="gate-total-tickets">0 vé</p>
+          <div class="stat-badge trend-neutral">
+            <i class="fa-solid fa-list-check"></i> Toàn bộ vé đã thanh toán
+          </div>
+          <div class="stat-footer-bar bar-blue"></div>
+        </div>
+
+        <div class="stat-card card-movies">
+          <div class="stat-card-header">
+            <span class="stat-label">Đã Check-in Vào Rạp</span>
+            <span class="stat-icon-box bg-purple"><i class="fa-solid fa-user-check"></i></span>
+          </div>
+          <p class="stat-number text-purple" id="gate-checked-tickets">0 vé</p>
+          <div class="stat-badge trend-up">
+            <i class="fa-solid fa-circle-check"></i> Khách đã qua cửa rạp
+          </div>
+          <div class="stat-footer-bar bar-purple"></div>
+        </div>
+
+        <div class="stat-card card-users">
+          <div class="stat-card-header">
+            <span class="stat-label">Tỷ Lệ Vào Phòng Chiếu</span>
+            <span class="stat-icon-box bg-gold"><i class="fa-solid fa-chart-pie"></i></span>
+          </div>
+          <p class="stat-number text-gold" id="gate-rate-tickets">0%</p>
+          <div class="stat-badge trend-up">
+            <i class="fa-solid fa-arrow-trend-up"></i> Tỷ lệ lấp đầy ghế thực tế
+          </div>
+          <div class="stat-footer-bar bar-gold"></div>
+        </div>
+      </div>
+
+      <!-- 4.2 Main Split Console: Scanner on Left, Inspection Card on Right -->
+      <div class="checkin-terminal-grid">
+        <!-- Left: Interactive Scanner & Code Entry -->
+        <div class="checkin-console-card">
+          <div class="console-card-header">
+            <div class="card-title-group">
+              <span class="title-badge"><i class="fa-solid fa-qrcode"></i></span>
+              <div>
+                <h4>Trạm Quét Vé & Nhận Diện</h4>
+                <p>Quét mã QR từ thiết bị của khách hoặc nhập mã vé in trên E-Ticket</p>
+              </div>
+            </div>
+            <span class="gate-mode-tag"><i class="fa-solid fa-bolt"></i> FAST SCAN</span>
+          </div>
+
+          <!-- Simulated Laser Scanner Viewfinder -->
+          <div class="scanner-viewfinder">
+            <div class="viewfinder-corner corner-tl"></div>
+            <div class="viewfinder-corner corner-tr"></div>
+            <div class="viewfinder-corner corner-bl"></div>
+            <div class="viewfinder-corner corner-br"></div>
+            <div class="scanner-laser-line"></div>
+            <div class="scanner-center-content">
+              <i class="fa-solid fa-qrcode qr-pulse-icon"></i>
+              <span class="scanner-tip-text">Đưa mã QR trên vé điện tử vào khung ngắm để kiểm tra</span>
+            </div>
+          </div>
+
+          <!-- Code Input Form -->
+          <form id="form-checkin" class="checkin-form">
+            <label for="input-checkin-code" class="checkin-input-label">
+              <i class="fa-solid fa-barcode"></i> Nhập Mã Vé Thủ Công
+            </label>
+            <div class="checkin-input-wrapper">
+              <input type="text" id="input-checkin-code" required placeholder="Ví dụ: BK-2026-DUNE01" autocomplete="off" spellcheck="false">
+              <button type="submit" class="btn btn-primary btn-checkin" id="btn-checkin-submit">
+                <i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra Vé
+              </button>
+            </div>
+          </form>
+
+          <!-- 1-Click Demo Testing Codes -->
+          <div class="quick-demo-codes-box">
+            <span class="quick-demo-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Mã vé kiểm thử nhanh:</span>
+            <div class="quick-demo-pills" id="checkin-demo-pills">
+              <button type="button" class="btn-demo-ticket" data-code="BK-2026-DUNE01">
+                <i class="fa-solid fa-ticket"></i> BK-2026-DUNE01 (Dune 2 - Hợp lệ)
+              </button>
+            </div>
+          </div>
+
+          <!-- Gate Policy Note -->
+          <div class="gate-policy-alert">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>
+              <strong>Quy trình soát vé chuẩn:</strong> Kiểm tra suất chiếu trùng khớp, đối chiếu vị trí ghế ngồi trước khi cho khách vào phòng chiếu. Mỗi mã vé chỉ được xác nhận 1 lần.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Ticket Inspection Result Card -->
+        <div class="checkin-inspect-card" id="checkin-inspect-panel">
+          <!-- Initial Empty State -->
+          <div class="inspect-empty-state" id="inspect-empty-view">
+            <div class="empty-icon-halo">
+              <i class="fa-solid fa-ticket-simple"></i>
+            </div>
+            <h4>Sẵn Sàng Kiểm Tra Vé</h4>
+            <p>Vui lòng quét mã QR hoặc nhập mã đơn vé ở khung bên trái để hiển thị thông tin suất chiếu và xác nhận vào rạp.</p>
+            <div class="inspect-feature-tags">
+              <span><i class="fa-solid fa-shield-halved"></i> Xác thực vé chuẩn</span>
+              <span><i class="fa-solid fa-couch"></i> Sơ đồ vị trí ghế</span>
+              <span><i class="fa-solid fa-ban"></i> Chống dùng vé 2 lần</span>
+            </div>
+          </div>
+
+          <!-- Result Container (Populated dynamically via JS) -->
+          <div id="checkin-result-box" class="checkin-result" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 4.3 Live Gate Check-in Activity Feed -->
+      <div class="table-container" style="margin-top:2rem;">
+        <div class="table-header">
+          <div class="table-header-left">
+            <h3><i class="fa-solid fa-clock-rotate-left" style="color:var(--accent-red);margin-right:8px;"></i>Nhật Ký Soát Vé Trực Tiếp Tại Cửa Rạp</h3>
+            <span class="record-counter-badge" id="checkin-feed-counter">0 lượt soát</span>
+          </div>
+          <div class="table-header-right">
+            <div class="table-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="checkin-feed-search" placeholder="Lọc theo mã vé, tên khách, phim...">
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Thời Gian</th>
+                <th>Mã Đơn Vé</th>
+                <th>Khách Hàng</th>
+                <th>Phim & Suất Chiếu</th>
+                <th>Phòng Chiếu</th>
+                <th>Vị Trí Ghế</th>
+                <th>Trạng Thái Cửa</th>
+              </tr>
+            </thead>
+            <tbody id="checkin-feed-body">
+              <tr><td colspan="7" class="placeholder-text" style="text-align:center;">Chưa có lượt soát vé nào trong phiên này.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   </main>
 
-  <script src="../js/common.js?v=2.3"></script>
-  <script src="../js/api.js?v=2.3"></script>
-  <script src="../js/auth.js?v=2.3"></script>
-  <script src="../js/admin.js?v=2.3"></script>
+  <script src="../js/common.js?v=2.4"></script>
+  <script src="../js/api.js?v=2.4"></script>
+  <script src="../js/auth.js?v=2.4"></script>
+  <script src="../js/admin.js?v=2.4"></script>
 </body>
 </html>

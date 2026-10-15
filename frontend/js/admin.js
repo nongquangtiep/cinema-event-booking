@@ -5,6 +5,8 @@
 let globalStats = null;
 let allAdminBookings = [];
 let allAdminMovies = [];
+let gateActivityFeed = [];
+let gateCheckedInCodes = new Set();
 
 document.addEventListener('DOMContentLoaded', () => {
   const user = auth.getUser();
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (targetId === 'sec-movies') loadAdminMovies();
       if (targetId === 'sec-bookings') loadAdminBookings();
+      if (targetId === 'sec-checkin') initCheckinSection();
     });
   });
 
@@ -70,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (secId === 'sec-stats') await loadDashboardStats();
     else if (secId === 'sec-movies') await loadAdminMovies();
     else if (secId === 'sec-bookings') await loadAdminBookings();
+    else if (secId === 'sec-checkin') await initCheckinSection();
 
     setTimeout(() => {
       icon?.classList.remove('spinning');
@@ -101,6 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const bookingsSearch = document.getElementById('bookings-search-input');
   bookingsSearch?.addEventListener('input', (e) => {
     filterAdminBookings(e.target.value.trim().toLowerCase());
+  });
+
+  const checkinSearch = document.getElementById('checkin-feed-search');
+  checkinSearch?.addEventListener('input', (e) => {
+    filterCheckinFeed(e.target.value.trim().toLowerCase());
   });
 
   // Toggle Movie Form
@@ -369,36 +378,270 @@ function filterAdminBookings(term) {
   renderAdminBookingsTable(filtered);
 }
 
+async function initCheckinSection() {
+  if (allAdminBookings.length === 0) {
+    try {
+      const res = await api.get('/admin/bookings');
+      allAdminBookings = res.data || [];
+    } catch (e) {
+      console.warn('Failed to pre-fetch bookings for checkin:', e);
+    }
+  }
+  updateGateStats();
+  renderDemoPills();
+}
+
+function updateGateStats() {
+  const paidBookings = allAdminBookings.filter(b => b.payment_status === 'paid');
+  const totalCount = paidBookings.length || 0;
+  const checkedCount = gateCheckedInCodes.size;
+  const rate = totalCount > 0 ? Math.round((checkedCount / totalCount) * 100) : 0;
+
+  const totalEl = document.getElementById('gate-total-tickets');
+  if (totalEl) totalEl.textContent = `${totalCount} vé`;
+
+  const checkedEl = document.getElementById('gate-checked-tickets');
+  if (checkedEl) checkedEl.textContent = `${checkedCount} vé`;
+
+  const rateEl = document.getElementById('gate-rate-tickets');
+  if (rateEl) rateEl.textContent = `${rate}%`;
+}
+
+function renderDemoPills() {
+  const container = document.getElementById('checkin-demo-pills');
+  if (!container) return;
+
+  const paidBookings = allAdminBookings.filter(b => b.payment_status === 'paid');
+  let codes = [];
+  if (paidBookings.length > 0) {
+    codes = paidBookings.slice(0, 4).map(b => ({
+      code: b.booking_code,
+      label: `${b.booking_code} (${b.movie_title.length > 18 ? b.movie_title.slice(0, 18) + '...' : b.movie_title})`
+    }));
+  } else {
+    codes = [{ code: 'BK-2026-DUNE01', label: 'BK-2026-DUNE01 (Dune 2 - Hợp lệ)' }];
+  }
+
+  container.innerHTML = codes.map(c => `
+    <button type="button" class="btn-demo-ticket" data-code="${c.code}">
+      <i class="fa-solid fa-ticket"></i> ${c.label}
+    </button>
+  `).join('');
+
+  container.querySelectorAll('.btn-demo-ticket').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.getAttribute('data-code');
+      const input = document.getElementById('input-checkin-code');
+      if (input) {
+        input.value = code;
+        input.focus();
+        document.getElementById('form-checkin')?.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    });
+  });
+}
+
 async function handleCheckIn(e) {
   e.preventDefault();
   const input = document.getElementById('input-checkin-code');
-  const code = input.value.trim();
+  const code = input.value.trim().toUpperCase();
+  const emptyView = document.getElementById('inspect-empty-view');
   const resultBox = document.getElementById('checkin-result-box');
+  const submitBtn = document.getElementById('btn-checkin-submit');
 
   if (!code) return;
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Soát...';
+  }
 
   try {
     const res = await api.post('/admin/check-in', { booking_code: code });
 
+    if (emptyView) emptyView.style.display = 'none';
+    resultBox.style.display = 'block';
     resultBox.className = 'checkin-result success';
+
+    const t = res.ticket;
+    const poster = t.poster_url || '../images/logo.png';
+    const duration = t.duration_minutes ? `${t.duration_minutes} phút` : '120 phút';
+    const seatsStr = (t.seats && t.seats.length > 0) ? t.seats.join(', ') : 'Chưa gán ghế';
+
+    // Track checked in
+    gateCheckedInCodes.add(t.booking_code);
+    updateGateStats();
+
+    // Render Luxury Cinema Pass Ticket
     resultBox.innerHTML = `
-      <h4 style="margin-bottom:0.75rem;font-size:1.15rem;"><i class="fa-solid fa-circle-check"></i> ${res.message}</h4>
-      <div style="font-size:0.92rem;display:flex;flex-direction:column;gap:6px;background:rgba(0,0,0,0.2);padding:1rem;border-radius:8px;">
-        <p>Khách hàng: <strong>${res.ticket.customer_name}</strong></p>
-        <p>Phim: <strong style="color:var(--accent-red);">${res.ticket.movie_title}</strong></p>
-        <p>Rạp & Phòng chiếu: <strong>${res.ticket.cinema_name} - ${res.ticket.hall_name}</strong></p>
-        <p>Suất chiếu: <strong>${formatDateTime(res.ticket.start_time)}</strong></p>
-        <p>Vị trí ghế ngồi: <strong style="color:var(--accent-gold);font-size:1.1rem;">${res.ticket.seats.join(', ')}</strong></p>
+      <div class="cinema-pass-ticket">
+        <div class="pass-ticket-top">
+          <div class="pass-brand-badge">
+            <i class="fa-solid fa-circle-check" style="color:#10b981;"></i> CINEWAVE GATE PASS
+          </div>
+          <div class="pass-code-pill">${t.booking_code}</div>
+        </div>
+        <div class="pass-ticket-body">
+          <div class="pass-movie-hero">
+            <img src="${poster}" alt="${t.movie_title}" class="pass-movie-poster" onerror="this.src='../images/logo.png'">
+            <div class="pass-movie-meta">
+              <h3 style="margin:0 0 0.35rem 0;color:#fff;font-size:1.15rem;">${t.movie_title}</h3>
+              <div class="pass-meta-badges">
+                <span><i class="fa-solid fa-film"></i> 2D Laser Digital</span>
+                <span><i class="fa-solid fa-clock"></i> ${duration}</span>
+                <span style="color:#10b981;background:rgba(16,185,129,0.15);"><i class="fa-solid fa-shield-check"></i> ĐÃ THANH TOÁN</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pass-details-grid">
+            <div class="pass-detail-item">
+              <span class="label">Khách Hàng</span>
+              <span class="value">${t.customer_name || 'Khách vãng lai'}</span>
+            </div>
+            <div class="pass-detail-item">
+              <span class="label">Số Điện Thoại</span>
+              <span class="value" style="font-family:monospace;">${t.customer_phone || '-'}</span>
+            </div>
+            <div class="pass-detail-item">
+              <span class="label">Cụm Rạp Chiếu</span>
+              <span class="value">${t.cinema_name}</span>
+            </div>
+            <div class="pass-detail-item">
+              <span class="label">Phòng Chiếu</span>
+              <span class="value">${t.hall_name}</span>
+            </div>
+            <div class="pass-detail-item">
+              <span class="label">Suất Chiếu</span>
+              <span class="value" style="color:var(--accent-blue);">${formatDateTime(t.start_time)}</span>
+            </div>
+            <div class="pass-detail-item">
+              <span class="label">Cổng Kiểm Soát</span>
+              <span class="value" style="color:#10b981;"><i class="fa-solid fa-door-open"></i> CỔNG 01 (VERIFIED)</span>
+            </div>
+          </div>
+
+          <div class="pass-seats-highlight">
+            <span class="seat-label"><i class="fa-solid fa-couch" style="color:var(--accent-red);margin-right:6px;"></i> GHẾ ĐƯỢC PHÉP VÀO:</span>
+            <span class="seats-val">${seatsStr}</span>
+          </div>
+
+          <div class="pass-ticket-actions">
+            <button type="button" class="btn btn-primary" style="background:#10b981;border-color:#10b981;font-weight:700;cursor:default;">
+              <i class="fa-solid fa-circle-check"></i> XÁC NHẬN CHO KHÁCH VÀO RẠP
+            </button>
+            <button type="button" class="btn btn-outline" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> In Thẻ Cửa
+            </button>
+          </div>
+        </div>
       </div>
     `;
+
+    // Add to gate feed
+    gateActivityFeed.unshift({
+      time: new Date(),
+      code: t.booking_code,
+      customer: t.customer_name || 'Khách vãng lai',
+      movie: t.movie_title,
+      hall: `${t.cinema_name} - ${t.hall_name}`,
+      seats: seatsStr,
+      status: 'success',
+      statusText: 'HỢP LỆ - QUA CỬA'
+    });
+    renderGateFeed();
+
     input.value = '';
-    showToast('Xác thực vé hợp lệ! Cho phép vào phòng chiếu.', 'success');
+    showToast(`Xác thực vé ${t.booking_code} thành công! Cho phép khách vào phòng chiếu.`, 'success');
   } catch (err) {
+    if (emptyView) emptyView.style.display = 'none';
+    resultBox.style.display = 'block';
     resultBox.className = 'checkin-result error';
     resultBox.innerHTML = `
-      <h4 style="font-size:1.1rem;"><i class="fa-solid fa-triangle-exclamation"></i> Không thể soát vé</h4>
-      <p style="font-size:0.92rem;margin-top:6px;">${err.message}</p>
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <i class="fa-solid fa-circle-xmark" style="font-size:2rem;color:#f43f5e;flex-shrink:0;"></i>
+        <div>
+          <h4 style="font-size:1.15rem;margin:0 0 0.5rem 0;color:#f43f5e;">Từ Chối Check-in Tại Cổng</h4>
+          <p style="font-size:0.95rem;line-height:1.5;margin:0 0 1rem 0;color:#cbd5e1;">${err.message || 'Mã vé không tồn tại hoặc chưa thanh toán thành công.'}</p>
+          <div style="display:flex;gap:8px;">
+            <button type="button" class="btn btn-outline btn-sm" id="btn-recheck-empty">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Đặt Lại Trạng Thái
+            </button>
+          </div>
+        </div>
+      </div>
     `;
+
+    document.getElementById('btn-recheck-empty')?.addEventListener('click', () => {
+      resultBox.style.display = 'none';
+      if (emptyView) emptyView.style.display = 'flex';
+      input.focus();
+    });
+
+    // Add error record to gate feed
+    gateActivityFeed.unshift({
+      time: new Date(),
+      code: code,
+      customer: 'Không xác định',
+      movie: 'N/A',
+      hall: 'Cổng 01',
+      seats: '-',
+      status: 'failed',
+      statusText: 'TỪ CHỐI / LỖI'
+    });
+    renderGateFeed();
+
     showToast(err.message || 'Mã vé không hợp lệ!', 'error');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Kiểm Tra Vé';
+    }
   }
 }
+
+function renderGateFeed(items = gateActivityFeed) {
+  const tbody = document.getElementById('checkin-feed-body');
+  const counter = document.getElementById('checkin-feed-counter');
+  if (!tbody) return;
+
+  if (counter) counter.textContent = `${items.length} lượt soát`;
+
+  if (items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="placeholder-text" style="text-align:center;padding:2rem;">Chưa có lượt soát vé nào trong phiên này.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = items.map(item => {
+    const isSuccess = item.status === 'success';
+    return `
+      <tr>
+        <td style="color:var(--text-secondary);font-size:0.85rem;"><i class="fa-solid fa-clock" style="margin-right:4px;"></i>${formatTimeOnly(item.time)}</td>
+        <td><span class="code-pill">${item.code}</span></td>
+        <td><strong>${item.customer}</strong></td>
+        <td><strong>${item.movie}</strong></td>
+        <td style="font-size:0.85rem;color:var(--text-secondary);">${item.hall}</td>
+        <td><strong style="color:var(--accent-gold);font-family:monospace;">${item.seats}</strong></td>
+        <td>
+          <span class="status-pill ${isSuccess ? 'status-paid' : 'status-failed'}" style="${isSuccess ? '' : 'background:rgba(239,68,68,0.15);color:#f43f5e;border:1px solid rgba(239,68,68,0.3);'}">
+            <i class="fa-solid ${isSuccess ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${item.statusText}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterCheckinFeed(term) {
+  if (!term) {
+    renderGateFeed(gateActivityFeed);
+    return;
+  }
+  const filtered = gateActivityFeed.filter(item =>
+    item.code.toLowerCase().includes(term) ||
+    item.customer.toLowerCase().includes(term) ||
+    item.movie.toLowerCase().includes(term)
+  );
+  renderGateFeed(filtered);
+}
+

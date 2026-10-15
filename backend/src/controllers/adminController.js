@@ -111,7 +111,7 @@ async function checkInTicket(req, res, next) {
     }
 
     const [bookings] = await pool.execute(
-      `SELECT b.*, s.start_time, m.title AS movie_title, h.name AS hall_name, c.name AS cinema_name
+      `SELECT b.*, s.start_time, m.title AS movie_title, m.poster_url, m.duration_minutes, h.name AS hall_name, c.name AS cinema_name
        FROM bookings b
        JOIN showtimes s ON b.showtime_id = s.id
        JOIN movies_events m ON s.movie_event_id = m.id
@@ -150,10 +150,14 @@ async function checkInTicket(req, res, next) {
       ticket: {
         booking_code: booking.booking_code,
         customer_name: booking.customer_name,
+        customer_phone: booking.customer_phone,
         movie_title: booking.movie_title,
+        poster_url: booking.poster_url,
+        duration_minutes: booking.duration_minutes,
         cinema_name: booking.cinema_name,
         hall_name: booking.hall_name,
         start_time: booking.start_time,
+        total_amount: booking.total_amount,
         seats: seats.map(s => `${s.seat_row}${s.seat_number}`)
       }
     });
