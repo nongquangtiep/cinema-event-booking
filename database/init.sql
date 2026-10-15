@@ -175,8 +175,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- user: user123 ($2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu)
 INSERT INTO `users` (`id`, `username`, `email`, `password_hash`, `full_name`, `phone`, `role`) VALUES
 (1, 'admin', 'admin@cinewave.vn', '$2b$10$9VoPGc.oPsSVOPonpoC.7.k9Ru1YsyTP5Ea4Gr4lmdPQ9nm0povIO', 'Quản Trị Viên Hệ Thống', '0988888888', 'admin'),
-(2, 'nguyenvanan', 'an.nguyen@example.com', '$2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu', 'Nguyễn Văn An', '0901234567', 'user'),
-(3, 'tranthibich', 'bich.tran@example.com', '$2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu', 'Trần Thị Bích', '0912345678', 'user');
+(2, 'user', 'user@cinewave.vn', '$2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu', 'Khách Hàng Demo', '0901234567', 'user'),
+(3, 'customer', 'customer@cinewave.vn', '$2b$10$vMRev8KE16.P9WRkbesYz.CTXUD7ixHum5y.RR0b2I672qmBRmVJy', 'Khách Hàng Thân Thiết', '0909999999', 'user'),
+(4, 'nguyenvanan', 'an.nguyen@example.com', '$2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu', 'Nguyễn Văn An', '0901234567', 'user'),
+(5, 'tranthibich', 'bich.tran@example.com', '$2b$10$9aYtKDCYdgO.5//DKsxnP.neFJeYN71a/wF2oXJ2O28GxiXdRLVFu', 'Trần Thị Bích', '0912345678', 'user');
 
 -- 2. Seed Categories
 INSERT INTO `categories` (`id`, `name`, `type`, `description`) VALUES
